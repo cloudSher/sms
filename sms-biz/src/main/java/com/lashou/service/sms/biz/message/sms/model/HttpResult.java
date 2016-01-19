@@ -1,4 +1,4 @@
-package com.lashou.service.sms.biz.sms.model;
+package com.lashou.service.sms.biz.message.sms.model;
 
 /**
  * @author cloudsher

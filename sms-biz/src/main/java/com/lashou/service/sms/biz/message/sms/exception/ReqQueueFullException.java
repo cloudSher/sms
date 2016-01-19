@@ -1,4 +1,4 @@
-package com.lashou.service.sms.biz.sms.exception;
+package com.lashou.service.sms.biz.message.sms.exception;
 
 /**
  * @author cloudsher

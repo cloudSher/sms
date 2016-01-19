@@ -1,4 +1,4 @@
-package com.lashou.service.sms.biz.sms.worker;
+package com.lashou.service.sms.biz.message.worker;
 
 /**
  * @author cloudsher

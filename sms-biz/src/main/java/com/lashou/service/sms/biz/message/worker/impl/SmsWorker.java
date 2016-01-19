@@ -1,10 +1,9 @@
-package com.lashou.service.sms.biz.sms.worker.impl;
+package com.lashou.service.sms.biz.message.worker.impl;
 
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
-import com.lashou.service.sms.biz.sms.queue.BasicQueue;
-import com.lashou.service.sms.biz.sms.sender.impl.SmsSender;
-import com.lashou.service.sms.biz.sms.worker.Worker;
+import com.lashou.service.sms.biz.message.sender.impl.SmsSender;
+
 
 
 import javax.annotation.Resource;

@@ -1,8 +1,8 @@
-package com.lashou.service.sms.biz.sms.sender.impl;
+package com.lashou.service.sms.biz.message.sender.impl;
 
 
-import com.lashou.service.sms.biz.sms.model.SmsMessage;
-import com.lashou.service.sms.biz.sms.sender.Sender;
+import com.lashou.service.sms.biz.message.sms.model.SmsMessage;
+import com.lashou.service.sms.biz.message.sender.Sender;
 import com.lashou.service.sms.domain.OpResult;
 
 /**

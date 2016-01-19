@@ -1,4 +1,4 @@
-package com.lashou.service.sms.biz.sms.common;
+package com.lashou.service.sms.biz.message.sms.common;
 
 /**
  * @author cloudsher

@@ -1,8 +1,6 @@
-package com.lashou.service.sms.biz.sms.queue;
+package com.lashou.service.sms.biz.message.queue;
 
-
-
-import com.lashou.service.sms.biz.sms.exception.ReqQueueFullException;
+import com.lashou.service.sms.biz.message.sms.exception.ReqQueueFullException;
 
 import java.util.Map;
 import java.util.Set;

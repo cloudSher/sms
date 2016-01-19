@@ -2,7 +2,7 @@ package com.lashou.service.sms.biz.impl;
 
 
 import com.lashou.service.sms.biz.PushService;
-import com.lashou.service.sms.biz.sms.queue.BasicQueue;
+import com.lashou.service.sms.biz.message.queue.BasicQueue;
 import com.lashou.service.sms.domain.PushMsg;
 
 /**
