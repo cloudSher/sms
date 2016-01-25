@@ -59,8 +59,8 @@
                     </dependency>
                     <dependency>
                         <groupId>com.lashou.soa</groupId>
-                        <artifactId>service-mps-domain</artifactId>
-                        <version>1.0-SNAPSHOT</version>
+                        <artifactId>service-sms-domain</artifactId>
+                        <version>0.0.1-SNAPSHOT</version>
                     </dependency>
                 </dependencies>
             </plugin>

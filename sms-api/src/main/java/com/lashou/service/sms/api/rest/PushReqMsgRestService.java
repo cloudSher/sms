@@ -1,9 +1,10 @@
 package com.lashou.service.sms.api.rest;
 
-import com.lashou.service.mps.domain.Caller;
-import com.lashou.service.mps.domain.Message;
-import com.lashou.service.mps.domain.MpsContext;
-import com.lashou.service.mps.domain.OpResult;
+
+import com.lashou.service.sms.domain.Caller;
+import com.lashou.service.sms.domain.Message;
+import com.lashou.service.sms.domain.MpsContext;
+import com.lashou.service.sms.domain.OpResult;
 
 /**
  * @author cloudsher
@@ -16,7 +17,7 @@ public interface PushReqMsgRestService {
      *  发送短消息接口
      * @return
      */
-    OpResult push_msg(Caller caller, Message msg, MpsContext context);
+    OpResult push_msg();
 
 
     String test(Long id);

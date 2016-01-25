@@ -2,8 +2,12 @@ package com.lashou.service.sms.biz.message.worker.impl;
 
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
+import com.lashou.service.sms.biz.message.queue.BasicQueue;
 import com.lashou.service.sms.biz.message.sender.impl.SmsSender;
-
+import com.lashou.service.sms.biz.message.sms.model.SmsRequestMsg;
+import com.lashou.service.sms.biz.message.worker.Worker;
+import com.lashou.service.sms.dic.PushScope;
+import com.lashou.service.sms.domain.PushReq;
 
 
 import javax.annotation.Resource;
@@ -19,7 +23,8 @@ public class SmsWorker implements Worker {
     private Logger logger = LoggerFactory.getLogger(SmsWorker.class);
 
     @Resource
-    private BasicQueue<Integer,Objects> messageQueue;
+    private BasicQueue<Integer,PushReq> smsMessageQueue;
+
     @Resource
     private SmsSender smsSender;
 
@@ -30,13 +35,19 @@ public class SmsWorker implements Worker {
         long startTime = System.currentTimeMillis();
         while(true){
             try{
-                messageQueue.take(true);
+                PushReq req = smsMessageQueue.take(true);
+                String scope = req.getPushScope();
+                PushScope ps = PushScope.getValue(scope);
+                switch (ps){
+                    case USER:
+                        smsSender.broadCast(req);
+                        break;
+                }
             }catch (Exception e){
-                logger.error("worker 执行失败"+Thread.currentThread().getName(),e);
+                logger.error("smsWorker 执行失败"+Thread.currentThread().getName(),e);
             }
-
+            logger.info("发送短信完成，花费时间："+(System.currentTimeMillis()-startTime)+"毫秒");
         }
-
 
     }
 

@@ -19,26 +19,48 @@
 
     <context:component-scan base-package="com.lashou"/>
 
-    <util:map id="serviceApiMap">
-        <entry key="service.api.sms.douwn" value="${service.api.sms.down}" />
-        <entry key="service.api.voice.play" value="${service.api.voice.play}" />
-    </util:map>
-
 
     <!-- ============================================================== -->
     <!-- =========================Queue配置============================ -->
     <!-- ============================================================== -->
-    <bean id="reqQueue" class="com.lashou.service.mps.biz.message.queue.BasicQueue">
+    <bean id="reqQueue" class="com.lashou.service.sms.biz.message.queue.BasicQueue">
         <property name="maxSize" value="5000" />
     </bean>
-    <bean id="smsMessageQueue" class="com.lashou.service.mps.biz.message.queue.BasicQueue">
+    <bean id="smsMessageQueue" class="com.lashou.service.sms.biz.message.queue.BasicQueue">
         <property name="maxSize" value="5000" />
     </bean>
 
     <!-- ============================================================== -->
     <!-- =========================Worker配置============================ -->
     <!-- ============================================================== -->
+    <bean id="smsWorker" class="com.lashou.service.sms.biz.message.worker.impl.SmsWorker">
+    </bean>
 
+    <!-- =============================================================== -->
+    <!-- =========================Sender配置============================ -->
+    <!-- =============================================================== -->
+    <bean id="smsSender" class="com.lashou.service.sms.biz.message.sender.impl.SmsSender">
+    </bean>
 
+    <!-- =============================================================== -->
+    <!-- =========================SMS配置================================ -->
+    <!-- =============================================================== -->
+    <bean id="smsService" class="com.lashou.service.sms.biz.message.sms.service.impl.SmsServiceImpl"/>
+    <bean id="mdSenderPool" class="com.lashou.service.sms.biz.message.sms.operators.mangdao.MDSenderPool" lazy-init="true"/>
+    <bean id="poolFactory" class="com.lashou.service.sms.biz.message.sms.common.SmsSenderPoolFactory">
+        <property name="poolMap">
+            <map>
+                <entry key="md" value-ref="mdSenderPool"></entry>
+            </map>
+        </property>
+    </bean>
+    <bean id="httpClient" class="com.lashou.service.sms.biz.message.sms.common.HttpExecutor"/>
+
+    <!-- =============================================================== -->
+    <!-- =========================StartUp配置============================ -->
+    <!-- =============================================================== -->
+    <bean id="startup" class="com.lashou.service.sms.biz.message.StartUp">
+        <property name="smsWorkerThreand" value="3"></property>
+    </bean>
 
 </beans>

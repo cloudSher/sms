@@ -1,5 +1,7 @@
 package com.lashou.service.sms.domain;
 
+import java.util.Objects;
+
 /**
  * <p> OpResult</p>
  * <p> 返回结果集 </p>
@@ -73,7 +75,11 @@ public class OpResult<R> {
                 '}';
     }
 
-    public static OpResult createSucceed(String msg,Object result){
-        return new OpResult<Object>(200,msg,1,result);
+    public static <T> OpResult<T> createSucceed(String msg,T result){
+        return new OpResult<T>(200,msg,1,result);
+    }
+
+    public static <T> OpResult<T> createFailMsg(String msg,T result){
+        return new OpResult<T>(400,msg,0,result);
     }
 }

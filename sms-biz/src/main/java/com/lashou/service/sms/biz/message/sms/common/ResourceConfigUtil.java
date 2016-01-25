@@ -14,6 +14,7 @@ import java.util.Properties;
 public class ResourceConfigUtil {
 
     private static Logger logger = LoggerFactory.getLogger(ResourceConfigUtil.class);
+    private final static String SOURCE = "properties/inner.config";
 
     /***
      * 解析资源
@@ -24,15 +25,42 @@ public class ResourceConfigUtil {
         if(StringUtil.isNullOrEmpty(source)){
             throw new RuntimeException("资源名称不能为空");
         }
+        Properties properties = null;
         try{
             InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(source);
             if(resourceAsStream!=null){
-
+                properties = new Properties();
+                properties.load(resourceAsStream);
             }
         }catch (Exception e){
             logger.error("资源加载出错，");
         }
 
+        return properties;
+    }
+
+    /**
+     * 获取config中参数值
+     * @param key
+     * @param def
+     * @return
+     */
+    public static String getValueOfString(String key,String def){
+        Properties properties = parse(SOURCE);
+        if(properties!=null){
+            Object orDefault = properties.getOrDefault(key, def);
+            return orDefault.toString();
+        }
+        return null;
+    }
+
+
+    public static Integer getValueOfInteger(String key,int def){
+        Properties properties = parse(SOURCE);
+        if(properties!= null){
+            Object orDefault = properties.getOrDefault(key, def);
+            return Integer.valueOf(orDefault.toString());
+        }
         return null;
     }
 }

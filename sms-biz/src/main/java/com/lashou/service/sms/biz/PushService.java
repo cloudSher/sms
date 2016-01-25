@@ -2,6 +2,7 @@ package com.lashou.service.sms.biz;
 
 
 import com.lashou.service.sms.domain.PushMsg;
+import com.lashou.service.sms.domain.PushReq;
 
 /**
  * 发送消息service
@@ -12,6 +13,6 @@ import com.lashou.service.sms.domain.PushMsg;
 public interface PushService {
 
 
-  void  req(PushMsg pushMsg);
+  void  req(PushReq req);
 }
 

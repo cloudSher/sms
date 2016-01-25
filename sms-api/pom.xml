@@ -20,18 +20,25 @@
         </dependency>
         <dependency>
             <groupId>com.lashou.soa</groupId>
-            <artifactId>service-mps-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>service-sms-biz</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.lashou.soa</groupId>
-            <artifactId>service-mps-biz</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>service-sms-domain</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.lashou.soa</groupId>
-            <artifactId>service-mps-domain</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
