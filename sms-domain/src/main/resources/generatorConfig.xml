@@ -25,13 +25,13 @@
 		</javaTypeResolver>
 
 		<!-- generate Model -->
-		<javaModelGenerator targetPackage="com.lashou.service.mps.domain" targetProject="src/main/java" />
+		<javaModelGenerator targetPackage="com.lashou.service.sms.domain" targetProject="src/main/java" />
 
 		<!-- generate xml -->
-		<sqlMapGenerator targetPackage="com.lashou.service.mps.dao" targetProject="src/main/resources" />
+		<sqlMapGenerator targetPackage="com.lashou.service.sms.dao" targetProject="src/main/resources" />
 
 		<!-- generate Mapper -->
-		<javaClientGenerator targetPackage="com.lashou.service.mps.dao" targetProject="src/main/java" type="XMLMAPPER" />
+		<javaClientGenerator targetPackage="com.lashou.service.sms.dao" targetProject="src/main/java" type="XMLMAPPER" />
 
 		<table tableName="caller" domainObjectName="Caller">
 			<generatedKey column="callerId" sqlStatement="MySQL" identity="true" />

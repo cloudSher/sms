@@ -7,29 +7,29 @@ import java.util.Date;
  * 
  *
  * @author Administrator
- * @date 2016-01-12
+ * @date 2016-01-27
  *
  */
 public class Message implements Serializable {
     /**  */
     private Integer id;
 
-    /** 消息体 */
+    /**  */
     private String content;
 
-    /** 消息来源 */
+    /**  */
     private String from;
 
-    /**  消息目的*/
+    /**  */
     private String to;
 
-    /**  发送的时间 */
+    /**  */
     private Date sendTime;
 
     /** 调用者Id */
-    private Integer callerId;
+    private Integer callerid;
 
-    /**  消息类型 */
+    /**  */
     private Integer type;
 
     private static final long serialVersionUID = 1L;
@@ -75,11 +75,11 @@ public class Message implements Serializable {
     }
 
     public Integer getCallerid() {
-        return callerId;
+        return callerid;
     }
 
     public void setCallerid(Integer callerid) {
-        this.callerId = callerid;
+        this.callerid = callerid;
     }
 
     public Integer getType() {

@@ -48,7 +48,7 @@ public class ResourceConfigUtil {
     public static String getValueOfString(String key,String def){
         Properties properties = parse(SOURCE);
         if(properties!=null){
-            Object orDefault = properties.getOrDefault(key, def);
+            Object orDefault = properties.getProperty(key, def);
             return orDefault.toString();
         }
         return null;
@@ -58,7 +58,7 @@ public class ResourceConfigUtil {
     public static Integer getValueOfInteger(String key,int def){
         Properties properties = parse(SOURCE);
         if(properties!= null){
-            Object orDefault = properties.getOrDefault(key, def);
+            Object orDefault = properties.getProperty(key, def+"");
             return Integer.valueOf(orDefault.toString());
         }
         return null;

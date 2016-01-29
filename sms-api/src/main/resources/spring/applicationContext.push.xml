@@ -46,7 +46,7 @@
     <!-- =========================SMS配置================================ -->
     <!-- =============================================================== -->
     <bean id="smsService" class="com.lashou.service.sms.biz.message.sms.service.impl.SmsServiceImpl"/>
-    <bean id="mdSenderPool" class="com.lashou.service.sms.biz.message.sms.operators.mangdao.MDSenderPool" lazy-init="true"/>
+    <bean id="mdSenderPool" class="com.lashou.service.sms.biz.message.sms.operators.mandao.MDSenderPool" lazy-init="true"/>
     <bean id="poolFactory" class="com.lashou.service.sms.biz.message.sms.common.SmsSenderPoolFactory">
         <property name="poolMap">
             <map>

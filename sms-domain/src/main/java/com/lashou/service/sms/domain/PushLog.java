@@ -7,7 +7,7 @@ import java.util.Date;
  * 
  *
  * @author Administrator
- * @date 2016-01-12
+ * @date 2016-01-27
  *
  */
 public class PushLog implements Serializable {
@@ -17,10 +17,10 @@ public class PushLog implements Serializable {
     /** 上下文的id */
     private Integer contextId;
 
-    /** 开始时间  */
+    /**  */
     private Date startTime;
 
-    /**  结束时间 */
+    /**  */
     private Date endTime;
 
     /** 状态 */

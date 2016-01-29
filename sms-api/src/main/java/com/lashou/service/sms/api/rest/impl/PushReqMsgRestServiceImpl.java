@@ -45,15 +45,13 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
 
     /**
      * 考虑：请求的消息体  是否是及时，数据量有多大
-     * @param caller
-     * @param msg
-     * @param context
+     *
      * @return
      */
     @GET
     @Path("push")
     @Consumes({MediaType.APPLICATION_JSON})
-    public OpResult push_msg() {
+    public OpResult pushMsg() {
         HttpServletRequest request = RpcContext.getContext().getRequest(HttpServletRequest.class);
         logger.info("push api start....");
 

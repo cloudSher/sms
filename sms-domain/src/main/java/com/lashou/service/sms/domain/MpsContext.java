@@ -7,7 +7,7 @@ import java.util.Date;
  * 
  *
  * @author Administrator
- * @date 2016-01-12
+ * @date 2016-01-27
  *
  */
 public class MpsContext implements Serializable {
@@ -20,13 +20,13 @@ public class MpsContext implements Serializable {
     /** scope的中的值 */
     private String value;
 
-    /**  调用者id*/
+    /**  */
     private Integer callerId;
 
-    /** 消息id */
+    /**  */
     private Integer messageId;
 
-    /** 创建时间 */
+    /**  */
     private Date createTime;
 
     private static final long serialVersionUID = 1L;

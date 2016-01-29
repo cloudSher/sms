@@ -1,4 +1,4 @@
-package com.lashou.service.sms.biz.message.sms.operators.mangdao;
+package com.lashou.service.sms.biz.message.sms.operators.mandao;
 
 
 import com.lashou.service.sms.biz.message.sms.SmsSender;
