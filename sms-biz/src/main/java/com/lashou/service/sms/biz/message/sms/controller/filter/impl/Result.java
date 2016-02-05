@@ -5,13 +5,13 @@ package com.lashou.service.sms.biz.message.sms.controller.filter.impl;
  * @version 1.0
  * @date 2016/1/27
  */
-public class Result {
+public class Result<T> {
 
     /**
      * code  0：无效，1：
      */
     private int code;
-
+    private T result;
 
     public int getCode() {
         return code;
@@ -21,6 +21,11 @@ public class Result {
         this.code = code;
     }
 
+    public T getResult() {
+        return result;
+    }
 
-
+    public void setResult(T result) {
+        this.result = result;
+    }
 }

@@ -19,7 +19,6 @@ public class SmsServiceImpl implements SmsService{
 
     private Logger logger = LoggerFactory.getLogger(SmsServiceImpl.class);
 
-
     @Resource
     private SenderPoolFactory poolFactory;
 
@@ -57,5 +56,10 @@ public class SmsServiceImpl implements SmsService{
             }
         }
         return smsResult;
+    }
+
+    public SmsResult send(SmsRequestMsg msg){
+
+        return null;
     }
 }

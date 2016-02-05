@@ -15,6 +15,6 @@ public class SmsMobilesFilter implements Filter {
     @Override
     public Result invoke(Invoker invoker, Invocation invocation) {
         System.out.println("mobile is filter");
-        return invoker.invoke(invocation);
+        return null;
     }
 }
