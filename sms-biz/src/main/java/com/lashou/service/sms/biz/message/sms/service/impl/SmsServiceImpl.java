@@ -19,11 +19,13 @@ public class SmsServiceImpl implements SmsService{
 
     private Logger logger = LoggerFactory.getLogger(SmsServiceImpl.class);
 
+
     @Resource
     private SenderPoolFactory poolFactory;
 
     @Override
     public SmsResult sendMessage(SmsRequestMsg msg) {
+
         msg.setChannel("md");
         SmsSenderPool pool = poolFactory.getPool(msg.getChannel());
         if(pool == null){
@@ -56,10 +58,5 @@ public class SmsServiceImpl implements SmsService{
             }
         }
         return smsResult;
-    }
-
-    public SmsResult send(SmsRequestMsg msg){
-
-        return null;
     }
 }

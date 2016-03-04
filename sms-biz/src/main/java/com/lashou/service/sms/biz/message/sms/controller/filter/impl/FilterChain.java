@@ -4,6 +4,7 @@ import com.lashou.service.sms.biz.message.sms.controller.filter.Filter;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Invocation;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Invoker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class FilterChain {
 
-    private List<Filter> filters;
+    private List<Filter> filters = new ArrayList<>();
 
     private int index;
 
@@ -25,6 +26,7 @@ public class FilterChain {
     public void setFilters(List<Filter> filters) {
         this.filters = filters;
     }
+
 
     public int getIndex() {
         return index;
@@ -48,5 +50,9 @@ public class FilterChain {
             }
         }
         return last;
+    }
+
+    public void addFilter(Filter filter){
+        filters.add(filter);
     }
 }

@@ -2,11 +2,14 @@ package com.lashou.service.sms.biz.message.config.impl;
 
 import com.lashou.service.sms.biz.message.config.Configuration;
 import com.lashou.service.sms.biz.message.config.ConfigurationProvider;
-import com.lashou.service.sms.biz.message.config.constants.ConfigType;
 import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException;
+import com.lashou.service.sms.domain.OpResult;
 
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author cloudsher
@@ -25,7 +28,31 @@ public class ConfigurationBuildFactory {
         provider.init();
         Properties pro = (Properties) provider.loadConfig(fileName);
         Configuration config = new DefaultConfiguration();
-//        config.
-        return null;
+        Map map = prop2Map(pro);
+        if(map!=null){
+            config.setConfigurationMap(map);
+        }
+        return config;
     }
+
+
+    public Map prop2Map(Properties properties){
+        Map<Object,Object> map = null;
+        if(properties!=null){
+            map = new ConcurrentHashMap<>();
+            Enumeration<?> enumeration = properties.propertyNames();
+            if(enumeration!=null){
+                while (enumeration.hasMoreElements()){
+                    Object element = enumeration.nextElement();
+                    Object o = properties.get(element);
+                    if(o != null){
+                        map.put(element,o);
+                    }
+                }
+            }
+        }
+        return map;
+    }
+
+
 }

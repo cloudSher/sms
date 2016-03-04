@@ -1,6 +1,9 @@
 package com.lashou.service.sms.biz.message.config;
 
 import com.lashou.service.sms.biz.message.config.constants.ConfigType;
+import com.lashou.service.sms.biz.message.config.impl.Container;
+
+import java.util.Map;
 
 /**
  * @author cloudsher
@@ -11,5 +14,13 @@ public interface Configuration<T> {
 
 
     Configuration getConfiguration();
+
+    void setConfigurationMap(Map<?,?> context);
+
+    Map<?,?> getConfigContext();
+
+    Container getContrainer();
+
+    Container loadContainer();
 
 }
