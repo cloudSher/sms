@@ -12,7 +12,21 @@ public class Channels {
 
     private String userId;
 
-    private String pwd;
+    private String user;
+
+    private String passwordId;
+
+    private String password;
+
+    private String mobileId;
+
+    private String msgId;
+
+    private String encode;
+
+    private int type;
+
+    private String url;
 
     private String companyId;
 
@@ -28,6 +42,45 @@ public class Channels {
 
     private String validDate;
 
+    private int httpclientMaxTotal;
+
+    private int httpclientConnectionTimeout;
+
+    private int httpclientSoTimeout;
+
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public int getHttpclientConnectionTimeout() {
+        return this.httpclientConnectionTimeout;
+    }
+
+    public void setHttpclientConnectionTimeout(int httpclientConnectionTimeout) {
+        this.httpclientConnectionTimeout = httpclientConnectionTimeout;
+    }
+
+    public int getHttpclientSoTimeout() {
+        return this.httpclientSoTimeout;
+    }
+
+    public void setHttpclientSoTimeout(int httpclientSoTimeout) {
+        this.httpclientSoTimeout = httpclientSoTimeout;
+    }
+
+    public int getHttpclientMaxTotal() {
+        return this.httpclientMaxTotal;
+    }
+
+    public void setHttpclientMaxTotal(int httpclientMaxTotal) {
+        this.httpclientMaxTotal = httpclientMaxTotal;
+    }
+
 
     public String getUserId() {
         return userId;
@@ -35,14 +88,6 @@ public class Channels {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getPwd() {
-        return pwd;
-    }
-
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
     }
 
     public String getCompanyId() {
@@ -116,5 +161,61 @@ public class Channels {
 
     public void setChannelName(String channelName) {
         this.channelName = channelName;
+    }
+
+    public int getType() {
+        return this.type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getUser() {
+        return this.user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getPasswordId() {
+        return this.passwordId;
+    }
+
+    public void setPasswordId(String passwordId) {
+        this.passwordId = passwordId;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getMobileId() {
+        return this.mobileId;
+    }
+
+    public void setMobileId(String mobileId) {
+        this.mobileId = mobileId;
+    }
+
+    public String getMsgId() {
+        return this.msgId;
+    }
+
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
+    }
+
+    public String getEncode() {
+        return this.encode;
+    }
+
+    public void setEncode(String encode) {
+        this.encode = encode;
     }
 }

@@ -1,6 +1,8 @@
 package com.lashou.service.sms.biz;
 
 
+import com.lashou.service.sms.domain.Message;
+import com.lashou.service.sms.domain.OpResult;
 import com.lashou.service.sms.domain.PushMsg;
 import com.lashou.service.sms.domain.PushReq;
 
@@ -13,6 +15,6 @@ import com.lashou.service.sms.domain.PushReq;
 public interface PushService {
 
 
-  void  req(PushReq req);
+  OpResult req(Message message);
 }
 

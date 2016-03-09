@@ -60,5 +60,9 @@ public class Dispatcher {
 
     }
 
+    public Container getContainer(){
+        return this.container;
+    }
+
 
 }

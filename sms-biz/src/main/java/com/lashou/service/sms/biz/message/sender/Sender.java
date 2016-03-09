@@ -2,9 +2,8 @@ package com.lashou.service.sms.biz.message.sender;
 
 
 import com.lashou.service.sms.biz.message.sms.model.SmsMessage;
-import com.lashou.service.sms.biz.message.sms.model.SmsRequestMsg;
+import com.lashou.service.sms.domain.Message;
 import com.lashou.service.sms.domain.OpResult;
-import com.lashou.service.sms.domain.PushReq;
 
 /**
  * @author cloudsher
@@ -15,5 +14,5 @@ public interface Sender {
 
    OpResult sendMessage(SmsMessage msg);
 
-   void broadCast(PushReq req);
+   void broadCast(Message message);
 }

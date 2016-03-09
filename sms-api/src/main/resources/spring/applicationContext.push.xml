@@ -23,10 +23,13 @@
     <!-- ============================================================== -->
     <!-- =========================Queue配置============================ -->
     <!-- ============================================================== -->
-    <bean id="reqQueue" class="com.lashou.service.sms.biz.message.queue.BasicQueue">
+    <bean id="pushMessageQueue" class="com.lashou.service.sms.biz.message.queue.BasicQueue">
         <property name="maxSize" value="5000" />
     </bean>
     <bean id="smsMessageQueue" class="com.lashou.service.sms.biz.message.queue.BasicQueue">
+        <property name="maxSize" value="5000" />
+    </bean>
+    <bean id="emailMessageQueue" class="com.lashou.service.sms.biz.message.queue.BasicQueue">
         <property name="maxSize" value="5000" />
     </bean>
 
@@ -55,6 +58,13 @@
         </property>
     </bean>
     <bean id="httpClient" class="com.lashou.service.sms.biz.message.sms.common.HttpExecutor"/>
+
+
+    <!-- =============================================================== -->
+    <!-- =========================Dispatcher配置============================ -->
+    <!-- =============================================================== -->
+    <bean class="com.lashou.service.sms.biz.message.dispatcher.Dispatcher" init-method="init"></bean>
+
 
     <!-- =============================================================== -->
     <!-- =========================StartUp配置============================ -->

@@ -20,7 +20,7 @@ public class SmsMessageFilter implements Filter {
         if(msg != null){
             String content = msg.getMessage();
             if(content != null && content.trim().length()!=0){
-                
+
             }
         }
         System.out.println("message filter");

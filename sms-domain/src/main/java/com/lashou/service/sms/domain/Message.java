@@ -1,92 +1,35 @@
 package com.lashou.service.sms.domain;
 
-import java.io.Serializable;
-import java.util.Date;
-
 /**
- * 
- *
- * @author Administrator
- * @date 2016-01-27
- *
+ * Created by sher on 3/8/16.
  */
-public class Message implements Serializable {
-    /**  */
-    private Integer id;
+public class Message {
 
-    /**  */
-    private String content;
+    private String msgId;
+    private Header header;
+    private Body body;
 
-    /**  */
-    private String from;
-
-    /**  */
-    private String to;
-
-    /**  */
-    private Date sendTime;
-
-    /** 调用者Id */
-    private Integer callerid;
-
-    /**  */
-    private Integer type;
-
-    private static final long serialVersionUID = 1L;
-
-    public Integer getId() {
-        return id;
+    public String getMsgId() {
+        return this.msgId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
     }
 
-    public String getContent() {
-        return content;
+    public Header getHeader() {
+        return this.header;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setHeader(Header header) {
+        this.header = header;
     }
 
-    public String getFrom() {
-        return from;
+    public Body getBody() {
+        return this.body;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
-    }
-
-    public Date getSendTime() {
-        return sendTime;
-    }
-
-    public void setSendTime(Date sendTime) {
-        this.sendTime = sendTime;
-    }
-
-    public Integer getCallerid() {
-        return callerid;
-    }
-
-    public void setCallerid(Integer callerid) {
-        this.callerid = callerid;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
+    public void setBody(Body body) {
+        this.body = body;
     }
 }

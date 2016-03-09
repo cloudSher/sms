@@ -113,7 +113,7 @@ public class Container {
      * add filter for container
      * @param filter
      */
-    protected void addFilter(Filter filter){
+    public void addFilter(Filter filter){
         if(chain == null){
             chain = new FilterChain();
         }
@@ -121,7 +121,7 @@ public class Container {
     }
 
 
-    protected void addListeners(Listener listener){
+    public void addListeners(Listener listener){
 
     }
 

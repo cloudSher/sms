@@ -7,18 +7,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.lashou.service.sms.api.rest.PushReqMsgRestService;
 import com.lashou.service.sms.biz.PushService;
 import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException;
-import com.lashou.service.sms.dic.PushChannel;
-import com.lashou.service.sms.dic.PushModel;
+import com.lashou.service.sms.dic.MessageType;
 import com.lashou.service.sms.domain.*;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * <p> PushReqMsgRestServiceImpl</p>
@@ -58,30 +54,33 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
         JSONObject jo = (JSONObject) request.getAttribute("json");
 
         Integer model = 1;
-        PushReq req = null;
-        PushModel pm = PushModel.get(model);
-        switch (pm){
-            case BATCH:
-                req = processBatch(jo);
-                break;
-            case BROADCAST:
-                req = processBroad(jo);
-                break;
-        }
-
-        req.setPushModel(pm.getValue());
-        req.setReqId(System.currentTimeMillis() + "@" + new Random(47).nextInt(100));
-        Integer channel = jo.getInteger("pushChannel");
-        PushChannel ch = PushChannel.get(channel);
-        req.setPushChannel(ch.getValue());
 
         long currTime = System.currentTimeMillis();
-        req.setReqTrack(new Date(currTime));
 
-        pushService.req(req);
+        String msg = jo.getString("content");
+        String mobiles = jo.getString("mobiles");
 
-        return new OpResult(200,"success",1,null);
+        Sender sender = new Sender();
+        sender.setType(MessageType.SMS.getKey());
+        Map<String,Object> resource = new HashMap<>();
+        resource.put("mobiles",mobiles);
+
+        Receiver receiver = new Receiver();
+        Header header = new Header();
+        header.setType(MessageType.SMS.getKey());
+
+        Body body = new Body();
+        body.setSender(sender);
+        body.setReceiver(receiver);
+        body.setContent(msg);
+        Message message = new Message();
+        message.setBody(body);
+        message.setHeader(header);
+        message.setMsgId(UUID.randomUUID().toString());
+        OpResult opResult = pushService.req(message);
+        return opResult;
     }
+
 
     /**
      * broad message
