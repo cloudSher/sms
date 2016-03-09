@@ -79,12 +79,11 @@ public class DefaultConfiguration<T> implements Configuration<T>{
         }
 
         Iterator<? extends Map.Entry<?, ?>> iterator = configContext.entrySet().iterator();
-        String oldcl = "";
         while(iterator.hasNext()){
             Map.Entry<?, ?> next = iterator.next();
             String key = (String) next.getKey();
             Object value = next.getValue();
-            if(StringUtil.isNullOrEmpty(key)){
+            if(!StringUtil.isNullOrEmpty(key)){
                 if(key.contains(".")){
                     String pre_key = key.substring(0,key.indexOf("."));
                     String suf_key = key.substring(key.indexOf(".")+1,key.length());

@@ -19,6 +19,7 @@
 
     <context:component-scan base-package="com.lashou"/>
 
+    <bean id="pushService" class="com.lashou.service.sms.biz.impl.PushServiceImpl"></bean>
 
     <!-- ============================================================== -->
     <!-- =========================Queue配置============================ -->
@@ -63,13 +64,13 @@
     <!-- =============================================================== -->
     <!-- =========================Dispatcher配置============================ -->
     <!-- =============================================================== -->
-    <bean class="com.lashou.service.sms.biz.message.dispatcher.Dispatcher" init-method="init"></bean>
-
+    <bean id="dispatcher" class="com.lashou.service.sms.biz.message.dispatcher.Dispatcher" init-method="init"></bean>
+    <bean id="queueDispatcher" class="com.lashou.service.sms.biz.message.dispatcher.QueueDispatcher"></bean>
 
     <!-- =============================================================== -->
     <!-- =========================StartUp配置============================ -->
     <!-- =============================================================== -->
-    <bean id="startup" class="com.lashou.service.sms.biz.message.StartUp">
+    <bean id="startup" class="com.lashou.service.sms.biz.message.StartUp" init-method="startup">
         <property name="smsWorkerThreand" value="3"></property>
     </bean>
 

@@ -32,6 +32,9 @@ public class SmsServiceImpl implements SmsService{
     @Resource
     private SenderPoolFactory poolFactory;
 
+    @Resource
+    private Dispatcher dispatcher;
+
 //    @Override
 //    public SmsResult sendMessage(SmsRequestMsg msg) {
 //
@@ -107,7 +110,6 @@ public class SmsServiceImpl implements SmsService{
     public List<Channels> getChannels(SmsRequestMsg msg){
         List<Channels> channelsList = null;
         try {
-            Dispatcher dispatcher = Dispatcher.getDispatcher();
             Container container = dispatcher.getContainer();
             container.setFilterChain(new FilterChain());
             container.addFilter(new SmsMessageFilter());

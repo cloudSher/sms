@@ -12,9 +12,8 @@ public class Dispatcher {
 
 
     private ConfigurationManager configurationManager;
-    private static ThreadLocal<Dispatcher> instance = new ThreadLocal<>();
     private Container container;
-
+    private static Dispatcher dispatcher;
     public ConfigurationManager getConfigurationManager() {
         return this.configurationManager;
     }
@@ -25,14 +24,17 @@ public class Dispatcher {
 
     //
     public static Dispatcher getDispatcher(){
-        return instance.get();
+        if(dispatcher == null){
+            synchronized (dispatcher){
+                if(dispatcher == null){
+                    dispatcher = new Dispatcher();
+                }
+            }
+        }
+        return dispatcher;
     }
 
-    public static void setDispatcher(Dispatcher dispatcher){
-        instance.set(dispatcher);
-    }
-
-    public Dispatcher(){
+    private Dispatcher(){
 
     }
 

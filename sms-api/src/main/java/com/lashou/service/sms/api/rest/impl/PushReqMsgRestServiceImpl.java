@@ -11,6 +11,7 @@ import com.lashou.service.sms.dic.MessageType;
 import com.lashou.service.sms.domain.*;
 import org.apache.log4j.Logger;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -33,6 +34,8 @@ import java.util.*;
 public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
 
     private static final Logger logger = Logger.getLogger(PushReqMsgRestServiceImpl.class);
+
+    @Resource
     private PushService pushService;
 
     public void setPushService(PushService pushService) {
@@ -40,7 +43,7 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
     }
 
     /**
-     * 考虑：请求的消息体  是否是及时，数据量有多大
+     * 考虑：请求的消息体
      *
      * @return
      */
@@ -51,9 +54,12 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
         HttpServletRequest request = RpcContext.getContext().getRequest(HttpServletRequest.class);
         logger.info("push api start....");
 
-        JSONObject jo = (JSONObject) request.getAttribute("json");
+        String json =  request.getParameter("message");
+        if(json == null){
+            return OpResult.createFailMsg("参数不能为空",null);
+        }
 
-        Integer model = 1;
+        JSONObject jo = JSONObject.parseObject(json);
 
         long currTime = System.currentTimeMillis();
 

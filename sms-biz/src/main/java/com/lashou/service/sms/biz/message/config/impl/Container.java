@@ -80,7 +80,7 @@ public class Container {
                     if(fieldMap!=null){
                         for(Map.Entry<String,Object> param : fieldMap.entrySet()){
                             String fieldKey = param.getKey();
-                            String fieldValue = (String) param.getValue();
+                            Object fieldValue = param.getValue();
 
                             Field field = clazz.getDeclaredField(fieldKey);
                             addInjectorForFields(field,channels,fieldValue);
@@ -161,7 +161,13 @@ public class Container {
 
         public void inject(){
             try {
-                field.set(obj,value);
+                if(field.getType().equals(Integer.class) || field.getType().equals(int.class)){
+                    int intValue = 0;
+                    intValue = Integer.valueOf(value.toString());
+                    field.set(obj,intValue);
+                }else{
+                    field.set(obj,value);
+                }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }

@@ -15,7 +15,7 @@ public class ConfigurationManager {
     private Logger logger = Logger.getLogger(ConfigurationManager.class);
 
     private Configuration configuration;
-    private final String fileName = "inner.config";
+    private final String fileName = "properties/inner.config";
 
 
     //TODO how to scan classes file to load config

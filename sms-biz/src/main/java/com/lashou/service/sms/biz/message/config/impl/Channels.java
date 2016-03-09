@@ -6,6 +6,8 @@ package com.lashou.service.sms.biz.message.config.impl;
  */
 public class Channels {
 
+    private String id;
+
     private String channelId;
 
     private String channelName;
@@ -48,6 +50,13 @@ public class Channels {
 
     private int httpclientSoTimeout;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getUrl() {
         return this.url;
