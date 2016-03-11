@@ -70,6 +70,7 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
         sender.setType(MessageType.SMS.getKey());
         Map<String,Object> resource = new HashMap<>();
         resource.put("mobiles",mobiles);
+        sender.setParameters(resource);
 
         Receiver receiver = new Receiver();
         Header header = new Header();

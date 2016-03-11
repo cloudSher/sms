@@ -26,6 +26,10 @@ public class Channels {
 
     private String encode;
 
+    private String channelCode;
+
+    private String channelCodeId;
+
     private int type;
 
     private String url;
@@ -226,5 +230,21 @@ public class Channels {
 
     public void setEncode(String encode) {
         this.encode = encode;
+    }
+
+    public String getChannelCode() {
+        return channelCode;
+    }
+
+    public void setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
+    }
+
+    public String getChannelCodeId() {
+        return channelCodeId;
+    }
+
+    public void setChannelCodeId(String channelCodeId) {
+        this.channelCodeId = channelCodeId;
     }
 }

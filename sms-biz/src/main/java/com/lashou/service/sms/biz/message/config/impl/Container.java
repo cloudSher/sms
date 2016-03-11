@@ -25,7 +25,6 @@ public class Container {
 
     private static Logger logger = LoggerFactory.getLogger(Container.class);
     private final ConcurrentHashMap<String,Object> mpsContext = new ConcurrentHashMap<>();
-    private static ThreadLocal instance = new ThreadLocal();
     private static Container container;
     private static Object myLock = new Object();
     private final Map<String,Channels> channelsMap = new ConcurrentHashMap<>();
@@ -34,7 +33,7 @@ public class Container {
 
     private FilterChain chain;
 
-    private boolean running;
+    private boolean running = false;
 
     private Container(){}
 
@@ -125,17 +124,25 @@ public class Container {
 
     }
 
+    public List<Channels> getChannels(){
+        List<Channels> list = new ArrayList<>(channelsMap.size());
+        if(channelsMap!=null){
+            for(Map.Entry<String,Channels> entry : channelsMap.entrySet()){
+                list.add(entry.getValue());
+            }
+        }
+        return list;
+    }
+
     public Invoker invoke() throws InvalidArgumentException {
         Invoker invoker = null;
-        if(!running){
-            running = true;
-            if(channelsMap==null)
-                throw new InvalidArgumentException("渠道商没有初始化成功");
-            if(chain == null){
-                chain = new FilterChain();
-            }
-            invoker = chain.buildInvokeChain();
+        running = true;
+        if(channelsMap==null)
+            throw new InvalidArgumentException("渠道商没有初始化成功");
+        if(chain == null){
+            chain = new FilterChain();
         }
+        invoker = chain.buildInvokeChain();
         return invoker;
     }
 

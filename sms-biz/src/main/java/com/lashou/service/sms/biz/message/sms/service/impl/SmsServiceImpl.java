@@ -114,10 +114,12 @@ public class SmsServiceImpl implements SmsService{
             container.setFilterChain(new FilterChain());
             container.addFilter(new SmsMessageFilter());
             container.addFilter(new SmsMobilesFilter());
+            container.addFilter(new SmsChannelsTypeFilter());
             Invoker invoker = container.invoke();
             Invocation invocation = new SmsInvocation();
             invocation.setAttachment(msg);
             invocation.setContainer(container);
+            invocation.setChannels(container.getChannels());
             Result result = invoker.invoke(invocation);
             if(result!=null){
                 if(result.getCode() == 1){

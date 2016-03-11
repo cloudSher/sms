@@ -24,6 +24,6 @@ public class SmsMessageFilter implements Filter {
             }
         }
         System.out.println("message filter");
-        return null;
+        return invoker.invoke(invocation);
     }
 }

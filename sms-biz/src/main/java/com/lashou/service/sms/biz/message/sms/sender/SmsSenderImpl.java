@@ -5,6 +5,8 @@ import com.lashou.service.sms.biz.message.protocol.HttpClient;
 import com.lashou.service.sms.biz.message.protocol.httpclient.HttpClientImpl;
 import com.lashou.service.sms.biz.message.protocol.httpclient.HttpClientTask;
 import com.lashou.service.sms.biz.message.sms.SmsSender;
+import com.lashou.service.sms.biz.message.sms.common.EncrptUtil;
+import com.lashou.service.sms.biz.message.sms.common.StringUtil;
 import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException;
 import com.lashou.service.sms.biz.message.sms.model.HttpResult;
 import com.lashou.service.sms.biz.message.sms.model.HttpResultCode;
@@ -26,8 +28,8 @@ public class SmsSenderImpl implements SmsSender {
         SmsResult smsResult = new SmsResult();
         try {
             if(channels!=null){
-                String url = "";
-                String character = "";
+                String url = getUrl(channels,msg);
+                String character = channels.getEncode();
                 HttpClientTask task = new HttpClientTask(url,character);
                 HttpResult result = httpClient.execute(task);
                 if(result!=null){
@@ -49,6 +51,20 @@ public class SmsSenderImpl implements SmsSender {
         return smsResult;
     }
 
+    public String getUrl(Channels channels,SmsRequestMsg msg){
+        StringBuilder str = new StringBuilder();
+        String message = msg.getMessage();
+        message = StringUtil.encoding(message,channels.getEncode());
+        str.append(channels.getUrl())
+                .append("?").append(channels.getUserId()).append("=").append(channels.getUser())
+                .append("&").append(channels.getPasswordId()).append("=").append(channels.getPassword())
+                .append("&").append(channels.getMsgId()).append("=").append(message)
+                .append("&").append(channels.getMobileId()).append("=").append(msg.getMobiles());
+        if(channels.getChannelCodeId()!=null){
+            str.append("&").append(channels.getChannelCodeId()).append("=").append(channels.getChannelCode());
+        }
+        return str.toString();
+    }
 
     public void initHttpclient(Channels channels) {
         try {
