@@ -75,7 +75,7 @@ public class SmsServiceImpl implements SmsService{
 
     public SmsResult sendMessage(SmsRequestMsg msg){
 
-        List<Channels> channelsList = getChannels(msg);
+        List<Channels> channelsList = dispatcher.getChannels(msg);
         if(channelsList == null){
             throw new RuntimeException("渠道商信息为空");
         }
@@ -107,31 +107,6 @@ public class SmsServiceImpl implements SmsService{
     }
 
 
-    public List<Channels> getChannels(SmsRequestMsg msg){
-        List<Channels> channelsList = null;
-        try {
-            Container container = dispatcher.getContainer();
-            container.setFilterChain(new FilterChain());
-            container.addFilter(new SmsMessageFilter());
-            container.addFilter(new SmsMobilesFilter());
-            container.addFilter(new SmsChannelsTypeFilter());
-            Invoker invoker = container.invoke();
-            Invocation invocation = new SmsInvocation();
-            invocation.setAttachment(msg);
-            invocation.setContainer(container);
-            invocation.setChannels(container.getChannels());
-            Result result = invoker.invoke(invocation);
-            if(result!=null){
-                if(result.getCode() == 1){
-                    channelsList = invocation.getChannels();
-                }
-            }
-        } catch (InvalidArgumentException e) {
-            e.printStackTrace();
-        }
-
-        return channelsList;
-    }
 
 
     public SmsResult reSendMsg(SmsSender smsSender,SmsRequestMsg msg){

@@ -11,7 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -77,12 +80,32 @@ public class Container {
                     paramterMap.put(channels, fieldMap);
                     Class clazz = channels.getClass();
                     if(fieldMap!=null){
+                        List list = null;
+                        Map<String,Object> cMap = null;
                         for(Map.Entry<String,Object> param : fieldMap.entrySet()){
                             String fieldKey = param.getKey();
                             Object fieldValue = param.getValue();
 
-                            Field field = clazz.getDeclaredField(fieldKey);
-                            addInjectorForFields(field,channels,fieldValue);
+                            if(fieldKey!=null){
+
+                                if(fieldKey.contains(".")){
+
+                                    initChildClass(fieldKey, fieldValue, clazz, list, cMap);
+
+                                }else{
+                                    Field field = clazz.getDeclaredField(fieldKey);
+                                    addInjectorForFields(field,channels,fieldValue);
+                                }
+
+
+                            }
+                        }
+
+                        if(cMap!=null && list != null){
+                            String keys[] = (String[]) cMap.keySet().toArray();
+                            String key = keys[0];
+                            Field field = clazz.getDeclaredField(key.substring(0,key.length()-1));
+                            addInjectorForFields(field,channels,list);
                         }
                     }
 
@@ -90,10 +113,52 @@ public class Container {
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
                 logger.error("addInjector error ,",e);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
         }
         return this;
     }
+
+
+
+    public void initChildClass(String fieldKey, Object value,Class clazz,List list ,Map<String,Object> cMap) throws NoSuchFieldException, IllegalAccessException, InstantiationException {
+        if(cMap == null)
+             cMap = new HashMap<>();
+        if(list == null)
+             list = new ArrayList();
+        if(fieldKey.contains(".")) {
+            String cgkey = fieldKey.split(".")[0];
+            String cval = fieldKey.split(".")[1];
+
+
+            String tail = cgkey.substring(cgkey.length()-1);
+            String ckey;
+            if(tail.matches("\\d+")){
+                ckey = cgkey.substring(0,cgkey.length()-1);
+            }else{
+                ckey = cgkey;
+            }
+
+            Field field = clazz.getDeclaredField(ckey);
+            ParameterizedType type = (ParameterizedType) field.getGenericType();
+
+            Class<?> cc = (Class<?>) type.getActualTypeArguments()[0];
+            Object o = cMap.get(cgkey);
+            if (o == null) {
+                o = cc.newInstance();
+                cMap.put(cgkey, o);
+                list.add(o);
+            }
+            Field cField = cc.getDeclaredField(cval);
+            new FieldInjector(cField,o,value).inject();
+        }
+
+    }
+
+
 
     protected void addInjectorForFields(Field field,Object o, Object value){
         injectors.add(new FieldInjector(field,o,value));
@@ -172,12 +237,32 @@ public class Container {
                     int intValue = 0;
                     intValue = Integer.valueOf(value.toString());
                     field.set(obj,intValue);
+                }else if(field.getType().equals(Map.class)) {
+                    Map<String, String> map = new HashMap<>();
+                    String val = value.toString();
+                    initMap(val, map);
+                    field.set(obj, map);
                 }else{
                     field.set(obj,value);
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+        }
+
+        public void initMap(String value,Map<String,String> map){
+            if(value!=null && value.length()>0){
+                String accounts[] = value.split(";");
+                for(int i = 0 ; i <accounts.length; i++){
+                    String users = accounts[i];
+                    if(users!=null && users.length()>0){
+                        String user[] = users.split(":");
+                        map.put(user[0],user[1]);
+                    }
+                }
+            }
+
+
         }
 
     }

@@ -13,6 +13,8 @@ import com.lashou.service.sms.biz.message.sms.model.HttpResultCode;
 import com.lashou.service.sms.biz.message.sms.model.SmsRequestMsg;
 import com.lashou.service.sms.biz.message.sms.model.SmsResult;
 
+import java.util.Map;
+
 /**
  * Created by sher on 3/4/16.
  */
@@ -56,8 +58,8 @@ public class SmsSenderImpl implements SmsSender {
         String message = msg.getMessage();
         message = StringUtil.encoding(message,channels.getEncode());
         str.append(channels.getUrl())
-                .append("?").append(channels.getUserId()).append("=").append(channels.getUser())
-                .append("&").append(channels.getPasswordId()).append("=").append(channels.getPassword())
+                .append("?").append(channels.getUserId()).append("=").append(channels.getAccount().getUser())
+                .append("&").append(channels.getPasswordId()).append("=").append(channels.getAccount().getPassword())
                 .append("&").append(channels.getMsgId()).append("=").append(message)
                 .append("&").append(channels.getMobileId()).append("=").append(msg.getMobiles());
         if(channels.getChannelCodeId()!=null){

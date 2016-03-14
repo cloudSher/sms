@@ -1,5 +1,8 @@
 package com.lashou.service.sms.biz.message.config.impl;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 渠道商
  * Created by sher on 1/29/16.
@@ -14,11 +17,11 @@ public class Channels {
 
     private String userId;
 
-    private String user;
+    private List<ChannelsAccount> accounts;
+
+    private ChannelsAccount account;
 
     private String passwordId;
-
-    private String password;
 
     private String mobileId;
 
@@ -184,12 +187,20 @@ public class Channels {
         this.type = type;
     }
 
-    public String getUser() {
-        return this.user;
+    public List<ChannelsAccount> getAccounts() {
+        return this.accounts;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setAccounts(List<ChannelsAccount> accounts) {
+        this.accounts = accounts;
+    }
+
+    public ChannelsAccount getAccount() {
+        return this.account;
+    }
+
+    public void setAccount(ChannelsAccount account) {
+        this.account = account;
     }
 
     public String getPasswordId() {
@@ -198,14 +209,6 @@ public class Channels {
 
     public void setPasswordId(String passwordId) {
         this.passwordId = passwordId;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getMobileId() {
