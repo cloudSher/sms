@@ -104,8 +104,14 @@ public class Container {
                         if(cMap!=null && list != null){
                             String keys[] = (String[]) cMap.keySet().toArray();
                             String key = keys[0];
-                            Field field = clazz.getDeclaredField(key.substring(0,key.length()-1));
-                            addInjectorForFields(field,channels,list);
+                            if(keys.length == 1 && key.matches("^[a-zA-Z]+$")){
+                                Field field = clazz.getDeclaredField(key);
+                                addInjectorForFields(field,channels,list.get(0));
+                            }else{
+                                key = key.substring(0,key.length()-1);
+                                Field field = clazz.getDeclaredField(key);
+                                addInjectorForFields(field,channels,list);
+                            }
                         }
                     }
 
@@ -130,30 +136,42 @@ public class Container {
         if(list == null)
              list = new ArrayList();
         if(fieldKey.contains(".")) {
-            String cgkey = fieldKey.split(".")[0];
-            String cval = fieldKey.split(".")[1];
+            String cgkey = fieldKey.split("\\.")[0];
+            String cval = fieldKey.split("\\.")[1];
 
 
             String tail = cgkey.substring(cgkey.length()-1);
             String ckey;
             if(tail.matches("\\d+")){
                 ckey = cgkey.substring(0,cgkey.length()-1);
+                Field field = clazz.getDeclaredField(ckey);
+                ParameterizedType type = (ParameterizedType) field.getGenericType();
+
+                Class<?> cc = (Class<?>) type.getActualTypeArguments()[0];
+                Object o = cMap.get(cgkey);
+                if (o == null) {
+                    o = cc.newInstance();
+                    cMap.put(cgkey, o);
+                    list.add(o);
+                }
+                Field cField = cc.getDeclaredField(cval);
+                new FieldInjector(cField,o,value).inject();
             }else{
                 ckey = cgkey;
+
+                Field declaredField = clazz.getDeclaredField(ckey);
+                Type type = declaredField.getGenericType();
+                Class<?> cc = (Class<?>)type;
+                Object o = cMap.get(ckey);
+                if(o == null){
+                    o = cc.newInstance();
+                    cMap.put(ckey,o);
+                    list.add(o);
+                }
+                Field cField = cc.getDeclaredField(cval);
+                new FieldInjector(cField,o,value).inject();
             }
 
-            Field field = clazz.getDeclaredField(ckey);
-            ParameterizedType type = (ParameterizedType) field.getGenericType();
-
-            Class<?> cc = (Class<?>) type.getActualTypeArguments()[0];
-            Object o = cMap.get(cgkey);
-            if (o == null) {
-                o = cc.newInstance();
-                cMap.put(cgkey, o);
-                list.add(o);
-            }
-            Field cField = cc.getDeclaredField(cval);
-            new FieldInjector(cField,o,value).inject();
         }
 
     }
