@@ -14,11 +14,13 @@ import com.lashou.service.sms.biz.message.sms.model.SmsRequestMsg;
 import com.lashou.service.sms.biz.message.sms.model.SmsResult;
 import com.lashou.service.sms.biz.message.sms.sender.SmsSenderFactory;
 import com.lashou.service.sms.biz.message.sms.service.SmsService;
+import com.lashou.service.sms.biz.monitor.impl.SmsMsgMonitorData;
 import com.lashou.service.sms.domain.OpResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,67 +32,35 @@ public class SmsServiceImpl implements SmsService{
 
 
     @Resource
-    private SenderPoolFactory poolFactory;
-
-    @Resource
     private Dispatcher dispatcher;
-
-//    @Override
-//    public SmsResult sendMessage(SmsRequestMsg msg) {
-//
-//        msg.setChannel("md");
-//        SmsSenderPool pool = poolFactory.getPool(msg.getChannel());
-//        if(pool == null){
-//            logger.error("获取短信通道商pool出错");
-//            return SmsResult.failed(10901,"获取短信通道出错");
-//
-//        }
-//        SmsSender smsSender = pool.get();
-//        if(smsSender == null){
-//            logger.error("获取短信通道sender出错");
-//            return SmsResult.failed(10801, "获取短信通道sender出错");
-//        }
-//
-//        SmsResult smsResult = smsSender.sendMessage(msg);
-//        //发送失败，尝试在重新发送，
-//        if(smsResult.getCode() != 10000){
-//            logger.error(msg.getChannel()+"发送失败，");
-//            for(int i = 0 ; i < 3; i++){
-//                SmsResult smsRt = smsSender.sendMessage(msg);
-//                if(smsRt.getCode() == 10000){
-//                    smsResult = smsRt;
-//                    break;
-//                }
-//                try{
-//                    Thread.sleep(5 * 1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                    logger.error(msg.getChannel()+"发送失败，尝试次数："+i);
-//                }
-//            }
-//        }
-//        return smsResult;
-//    }
 
 
     public SmsResult sendMessage(SmsRequestMsg msg){
-
-        List<Channels> channelsList = dispatcher.getChannels(msg);
-        if(channelsList == null){
-            throw new RuntimeException("渠道商信息为空");
+        Result result = dispatcher.serviceAction(msg);
+        List<SmsRequestMsg> list = null;
+        if(result!=null && result.getCode() ==1){
+            list = (List<SmsRequestMsg>) result.getT();
         }
 
-        Channels channels = channelsList.get(0);
-        SmsResult smsResult = sendMsg(channels, msg);
-
-        if(smsResult.getCode() == 0){
-            if(channelsList.size() > 1)
-                 channels = channelsList.get(1);
-            smsResult = sendMsg(channels, msg);
-            if(smsResult.getCode() == 0){
-                //todo 渠道商你也太牛了，这都请求不到
+        SmsResult smsResult = null;
+        if(list!=null && list.size() >0){
+            for(int i = 0 ; i < list.size(); i++){
+                SmsRequestMsg requestMsg = list.get(i);
+                 smsResult = sendMsg(requestMsg.getChannels(),requestMsg);
+                if(smsResult.getCode() == 0){
+                    //todo 未发送成功之后
+                    //添加监控数据
+                    addMonitor(requestMsg);
+                    Channels channels = dispatcher.reSiftChannels(requestMsg.getChannels());
+                    smsResult = sendMsg(channels, msg);
+                    if(smsResult.getCode() == 0){
+                        //todo 渠道商你也太牛了，这都请求不到，中彩了
+                        addMonitor(requestMsg);
+                    }
+                }
             }
         }
+
         return smsResult;
     }
 
@@ -107,7 +77,15 @@ public class SmsServiceImpl implements SmsService{
     }
 
 
-
+    public void addMonitor(SmsRequestMsg requestMsg){
+        SmsMsgMonitorData monitorData = new SmsMsgMonitorData();
+        monitorData.setMobiles(requestMsg.getMobiles());
+        monitorData.setCurrTime(new Date());
+        monitorData.setChannelsName(requestMsg.getChannels().getChannelName());
+        monitorData.setChannelsId(requestMsg.getChannels().getId());
+        monitorData.setDescription("未发送成功短信");
+        dispatcher.sendMonitorData(monitorData);
+    }
 
     public SmsResult reSendMsg(SmsSender smsSender,SmsRequestMsg msg){
         SmsResult smsResult = null;

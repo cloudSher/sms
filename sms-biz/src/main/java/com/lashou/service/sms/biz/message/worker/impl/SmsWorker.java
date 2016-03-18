@@ -2,6 +2,8 @@ package com.lashou.service.sms.biz.message.worker.impl;
 
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
+import com.lashou.service.sms.biz.message.config.constants.ContrainerStatus;
+import com.lashou.service.sms.biz.message.dispatcher.Dispatcher;
 import com.lashou.service.sms.biz.message.queue.BasicQueue;
 import com.lashou.service.sms.biz.message.sender.impl.SmsSender;
 import com.lashou.service.sms.biz.message.worker.Worker;
@@ -24,6 +26,14 @@ public class SmsWorker implements Worker {
     @Resource
     private SmsSender smsSender;
 
+    @Resource
+    private ConfigListenerInstance configInstance;
+
+    @Resource
+    private Dispatcher dispatcher;
+
+    private volatile boolean reload = false;
+
 
     @Override
     public void run() {
@@ -31,6 +41,18 @@ public class SmsWorker implements Worker {
         long startTime = System.currentTimeMillis();
         while(true){
             try{
+                if(!configInstance.isSignal()){
+                    reload = false;
+                    Thread.sleep(1 * 1000);
+                    synchronized (dispatcher){
+                        if(dispatcher.getContainer().getStatus() == ContrainerStatus.RUNNING && !reload){
+                            dispatcher.reload_Configuration();
+                            configInstance.setSignal(true);
+                            reload = true;
+                        }
+                    }
+
+                }
                 Message message = smsMessageQueue.take(true);
 
                 if(message != null){

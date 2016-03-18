@@ -1,6 +1,7 @@
 package com.lashou.service.sms.biz.message;
 
 import com.lashou.service.sms.biz.message.worker.Worker;
+import com.lashou.service.sms.biz.message.worker.impl.ConfigListenerWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +20,13 @@ public class StartUp {
 
     private ExecutorService smsWorkerPool;
 
+    private ExecutorService configListenerPool;
+
     @Resource
     private Worker smsWorker;
+
+    @Resource
+    private ConfigListenerWorker configListenerWorker;
 
     public void startup(){
         logger.info("work  startup.....");
@@ -28,12 +34,18 @@ public class StartUp {
         for(int i = 0 ; i < smsWorkerThreand; i++){
             smsWorkerPool.execute(smsWorker);
         }
+
+        logger.info("config file listener startup ....");
+        configListenerPool =Executors.newFixedThreadPool(1);
+        configListenerPool.execute(configListenerWorker);
+
         logger.info("work 启动完成");
     }
 
     public void stop(){
         logger.info("work thread stop...");
         smsWorkerPool.shutdown();
+        configListenerPool.shutdown();
     }
 
 

@@ -1,5 +1,7 @@
 package com.lashou.service.sms.biz.message.sms.model;
 
+import com.lashou.service.sms.biz.message.config.impl.Channels;
+
 /**
  * Created by sher on 1/20/16.
  */
@@ -11,6 +13,8 @@ public class SmsRequestMsg {
     private String message;
     /** 通道 **/
     private String channel;
+
+    private Channels channels;
 
     public String getMobiles() {
         return mobiles;
@@ -34,5 +38,13 @@ public class SmsRequestMsg {
 
     public void setChannel(String channel) {
         this.channel = channel;
+    }
+
+    public Channels getChannels() {
+        return channels;
+    }
+
+    public void setChannels(Channels channels) {
+        this.channels = channels;
     }
 }

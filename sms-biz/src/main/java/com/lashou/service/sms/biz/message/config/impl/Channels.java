@@ -45,9 +45,9 @@ public class Channels {
 
     private int maxMobilesSize;
 
-    private boolean isUsed;
+    private boolean isUsed = true;
 
-    private int priority;   //1:最高
+    private int priority;   //
 
     private String validDate;
 
@@ -56,6 +56,12 @@ public class Channels {
     private int httpclientConnectionTimeout;
 
     private int httpclientSoTimeout;
+
+    private int CMCRatio;    //运营商占比
+
+    private int CUCRatio;
+
+    private int CTCRatio;
 
     public String getId() {
         return id;
@@ -249,5 +255,29 @@ public class Channels {
 
     public void setChannelCodeId(String channelCodeId) {
         this.channelCodeId = channelCodeId;
+    }
+
+    public int getCMCRatio() {
+        return CMCRatio;
+    }
+
+    public void setCMCRatio(int CMCRatio) {
+        this.CMCRatio = CMCRatio;
+    }
+
+    public int getCUCRatio() {
+        return CUCRatio;
+    }
+
+    public void setCUCRatio(int CUCRatio) {
+        this.CUCRatio = CUCRatio;
+    }
+
+    public int getCTCRatio() {
+        return CTCRatio;
+    }
+
+    public void setCTCRatio(int CTCRatio) {
+        this.CTCRatio = CTCRatio;
     }
 }

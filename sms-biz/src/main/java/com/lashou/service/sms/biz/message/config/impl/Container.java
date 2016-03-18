@@ -7,6 +7,7 @@ import com.lashou.service.sms.biz.message.sms.controller.filter.Invoker;
 import com.lashou.service.sms.biz.message.sms.controller.filter.impl.FilterChain;
 import com.lashou.service.sms.biz.message.sms.controller.filter.impl.SmsInvocation;
 import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException;
+import com.lashou.service.sms.biz.monitor.Monitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,10 +37,37 @@ public class Container {
 
     private FilterChain chain;
 
-    private boolean running = false;
+    private volatile boolean running = true;
+
+    private volatile int status;
+
+    private Monitor monitor;
 
     private Container(){}
 
+    public synchronized void setRunning(boolean rn){
+        this.running = rn;
+    }
+
+    public boolean isRunning(){
+        return running;
+    }
+
+    public synchronized void setStatus(int status){
+        this.status = status;
+    }
+
+    public int getStatus(){
+        return status;
+    }
+
+    public Monitor getMonitor() {
+        return monitor;
+    }
+
+    public void setMonitor(Monitor monitor) {
+        this.monitor = monitor;
+    }
 
     public static Container getInstance(){
         if(container == null){
@@ -96,7 +124,6 @@ public class Container {
                                     Field field = clazz.getDeclaredField(fieldKey);
                                     addInjectorForFields(field,channels,fieldValue);
                                 }
-
 
                             }
                         }

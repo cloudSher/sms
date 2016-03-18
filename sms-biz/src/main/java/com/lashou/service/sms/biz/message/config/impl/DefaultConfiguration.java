@@ -4,8 +4,10 @@ import com.lashou.service.sms.biz.message.config.Configuration;
 import com.lashou.service.sms.biz.message.config.ConfigurationProvider;
 import com.lashou.service.sms.biz.message.config.constants.ChannelConfig;
 import com.lashou.service.sms.biz.message.config.constants.ConfigType;
+import com.lashou.service.sms.biz.message.config.constants.ContrainerStatus;
 import com.lashou.service.sms.biz.message.sms.common.StringUtil;
 import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException;
+import com.lashou.service.sms.biz.monitor.impl.SmsMsgMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +61,8 @@ public class DefaultConfiguration<T> implements Configuration<T>{
         }
         Container container = Container.getInstance();
         this.container = container;
+        container.setStatus(ContrainerStatus.INITING);
+        container.setMonitor(new SmsMsgMonitor());
         Map mpsContext =  container.getMpsContext();
         String channel_list = (String) configContext.get(ChannelConfig.CHANNEL_LIST);
         String channel_price = (String) configContext.get(ChannelConfig.CHANNEL_PRICE);

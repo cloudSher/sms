@@ -35,7 +35,7 @@ public class SmsSender implements Sender {
 
     @Override
     public void broadCast(Message message) {
-        logger.info("群发短信：", message.getMsgId());
+        logger.info("发短信：", message.getMsgId());
         SmsRequestMsg msg = new SmsRequestMsg();
         String mobiles = "";
         if(message != null){

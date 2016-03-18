@@ -21,6 +21,8 @@ public class BasicQueue<K,M> implements Queue<K,M>{
 
     private int maxSize;
 
+    private volatile boolean running  = true;
+
     @Override
     public void put(K key, M msg) throws ReqQueueFullException {
         if(reqMap.size() > maxSize){
