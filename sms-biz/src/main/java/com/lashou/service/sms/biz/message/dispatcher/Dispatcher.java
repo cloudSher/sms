@@ -3,15 +3,14 @@ package com.lashou.service.sms.biz.message.dispatcher;
 import com.lashou.service.sms.biz.message.config.Configuration;
 import com.lashou.service.sms.biz.message.config.constants.ContrainerStatus;
 import com.lashou.service.sms.biz.message.config.impl.Channels;
+import com.lashou.service.sms.biz.message.config.impl.ChannelsAccount;
 import com.lashou.service.sms.biz.message.config.impl.ConfigurationManager;
 import com.lashou.service.sms.biz.message.config.impl.Container;
-import com.lashou.service.sms.biz.message.config.impl.DefaultConfiguration;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Invocation;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Invoker;
 import com.lashou.service.sms.biz.message.sms.controller.filter.impl.*;
 import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException;
 import com.lashou.service.sms.biz.message.sms.model.SmsRequestMsg;
-import com.lashou.service.sms.biz.monitor.impl.SmsMsgMonitorData;
 
 import java.util.List;
 import java.util.Random;
@@ -87,11 +86,11 @@ public class Dispatcher {
     public synchronized Result serviceAction(SmsRequestMsg msg){
         Invocation invocation = null;
         try {
-            Container container = dispatcher.getContainer();
+            Container container = this.container;
             container.setFilterChain(new FilterChain());
 //            container.addFilter(new SmsMessageFilter());
 //            container.addFilter(new SmsMobilesFilter());
-            container.addFilter(new SmsChannelsTypeFilter());
+//            container.addFilter(new SmsChannelsTypeFilter());
             container.addFilter(new SmsOperatorRatioFilter());
             Invoker invoker = container.invoke();
             invocation = new SmsInvocation();
@@ -106,11 +105,11 @@ public class Dispatcher {
         return null;
     }
 
-    public synchronized Channels reSiftChannels(Channels channels){
+    public synchronized Channels reSiftChannels(Channels channels,SmsRequestMsg msg){
         if(channels!=null){
             channels.setIsUsed(false);
         }
-        List<Channels> cl = dispatcher.getContainer().getChannels();
+        List<Channels> cl = this.container.getChannels();
         Channels gc[] = new Channels[cl.size()-1];
         for(int i = 0,k=0 ; i < cl.size(); i++){
             Channels c = cl.get(i);
@@ -120,7 +119,21 @@ public class Dispatcher {
                 gc[k++] = c;
             }
         }
-        return gc[new Random().nextInt(gc.length)];
+
+        return chooseAccount(gc[new Random().nextInt(gc.length)],msg.getSendScope());
+    }
+
+    public Channels chooseAccount(Channels cl,int type){
+        if(cl.getAccounts()!=null && cl.getAccounts().size() > 1){
+            List<ChannelsAccount> accounts = cl.getAccounts();
+            for(int i = 0 ; i< accounts.size(); i++){
+                ChannelsAccount account = accounts.get(i);
+                if(account.getType() == type){
+                    cl.setAccount(account);
+                }
+            }
+        }
+        return cl;
     }
 
     public Container getContainer(){
@@ -128,7 +141,7 @@ public class Dispatcher {
     }
 
 
-    public void sendMonitorData(SmsMsgMonitorData monitorData) {
-        dispatcher.container.getMonitor().start();
+    public void sendMonitorData() {
+        container.getMonitor().start();
     }
 }

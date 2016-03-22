@@ -12,6 +12,8 @@ import com.lashou.service.sms.biz.message.sms.model.HttpResult;
 import com.lashou.service.sms.biz.message.sms.model.HttpResultCode;
 import com.lashou.service.sms.biz.message.sms.model.SmsRequestMsg;
 import com.lashou.service.sms.biz.message.sms.model.SmsResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 public class SmsSenderImpl implements SmsSender {
 
+    private static Logger logger = LoggerFactory.getLogger(SmsSenderImpl.class);
 
     private HttpClient httpClient;
 
@@ -28,20 +31,24 @@ public class SmsSenderImpl implements SmsSender {
     @Override
     public SmsResult sendMessage(SmsRequestMsg msg) {
         SmsResult smsResult = new SmsResult();
+        logger.info("smsSender sendMessage start...");
         try {
             if(channels!=null){
                 String url = getUrl(channels,msg);
                 String character = channels.getEncode();
                 HttpClientTask task = new HttpClientTask(url,character);
                 HttpResult result = httpClient.execute(task);
+                logger.info("发送短信执行完成，");
                 if(result!=null){
                     int code = result.getCode();
                     if(code == HttpResultCode.SUCCESS){
                         smsResult.setCode(1);
                         smsResult.setMsg("发送短消息成功");
+                        logger.info("发送短信成功");
                     }else{
                         smsResult.setCode(0);
                         smsResult.setMsg("发送短消息失败");
+                        logger.info("发送短信失败，");
                     }
                 }
             }

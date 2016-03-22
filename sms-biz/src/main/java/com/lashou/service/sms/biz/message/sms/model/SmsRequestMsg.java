@@ -13,6 +13,8 @@ public class SmsRequestMsg {
     private String message;
     /** 通道 **/
     private String channel;
+    /** 发送类型 **/
+    private int sendScope;
 
     private Channels channels;
 
@@ -46,5 +48,13 @@ public class SmsRequestMsg {
 
     public void setChannels(Channels channels) {
         this.channels = channels;
+    }
+
+    public int getSendScope() {
+        return sendScope;
+    }
+
+    public void setSendScope(int sendScope) {
+        this.sendScope = sendScope;
     }
 }

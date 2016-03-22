@@ -12,7 +12,7 @@ public class Sender {
     private String name;
     private int type;
     private Map<String ,Object> parameters;
-    private Date  sendTime;
+    private long  sendTime;
 
     public String getId() {
         return this.id;
@@ -38,11 +38,11 @@ public class Sender {
         this.parameters = parameters;
     }
 
-    public Date getSendTime() {
-        return this.sendTime;
+    public long getSendTime() {
+        return sendTime;
     }
 
-    public void setSendTime(Date sendTime) {
+    public void setSendTime(long sendTime) {
         this.sendTime = sendTime;
     }
 

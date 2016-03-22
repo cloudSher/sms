@@ -1,79 +1,35 @@
 package com.lashou.service.sms.biz.monitor.impl;
 
-import java.util.Date;
-
 /**
- * Created by cloudsher on 2016/3/18.
+ * Created by cloudsher on 2016/3/22.
  */
 public class SmsMsgMonitorData {
 
-    private String id;
+    private long succNum;
+    private long failNum;
+    private long laterNum;
 
-    private String name;
-
-    private String mobiles;
-
-    private Date currTime;
-
-    private String channelsName;
-
-    private String channelsId;
-
-    private String description;
-
-    public String getId() {
-        return id;
+    public long getSuccNum() {
+        return succNum;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSuccNum(long succNum) {
+        this.succNum = succNum;
     }
 
-    public String getName() {
-        return name;
+    public long getFailNum() {
+        return failNum;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFailNum(long failNum) {
+        this.failNum = failNum;
     }
 
-    public String getMobiles() {
-        return mobiles;
+    public long getLaterNum() {
+        return laterNum;
     }
 
-    public void setMobiles(String mobiles) {
-        this.mobiles = mobiles;
-    }
-
-    public Date getCurrTime() {
-        return currTime;
-    }
-
-    public void setCurrTime(Date currTime) {
-        this.currTime = currTime;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getChannelsName() {
-        return channelsName;
-    }
-
-    public void setChannelsName(String channelsName) {
-        this.channelsName = channelsName;
-    }
-
-    public String getChannelsId() {
-        return channelsId;
-    }
-
-    public void setChannelsId(String channelsId) {
-        this.channelsId = channelsId;
+    public void setLaterNum(long laterNum) {
+        this.laterNum = laterNum;
     }
 }

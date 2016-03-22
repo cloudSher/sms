@@ -14,10 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -108,30 +105,26 @@ public class Container {
                     paramterMap.put(channels, fieldMap);
                     Class clazz = channels.getClass();
                     if(fieldMap!=null){
-                        List list = null;
-                        Map<String,Object> cMap = null;
+                        List list = new ArrayList();
+                        Map<String,Object> cMap = new HashMap<>();
                         for(Map.Entry<String,Object> param : fieldMap.entrySet()){
                             String fieldKey = param.getKey();
                             Object fieldValue = param.getValue();
 
                             if(fieldKey!=null){
-
                                 if(fieldKey.contains(".")){
-
                                     initChildClass(fieldKey, fieldValue, clazz, list, cMap);
-
                                 }else{
                                     Field field = clazz.getDeclaredField(fieldKey);
                                     addInjectorForFields(field,channels,fieldValue);
                                 }
-
                             }
                         }
 
                         if(cMap!=null && list != null){
-                            String keys[] = (String[]) cMap.keySet().toArray();
-                            String key = keys[0];
-                            if(keys.length == 1 && key.matches("^[a-zA-Z]+$")){
+                            Set<String> keySet = cMap.keySet();
+                            String key = keySet.iterator().next();
+                            if(keySet.size() == 1 && key.matches("^[a-zA-Z]+$")){
                                 Field field = clazz.getDeclaredField(key);
                                 addInjectorForFields(field,channels,list.get(0));
                             }else{

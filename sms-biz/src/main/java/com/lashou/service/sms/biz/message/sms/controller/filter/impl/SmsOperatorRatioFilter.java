@@ -1,6 +1,7 @@
 package com.lashou.service.sms.biz.message.sms.controller.filter.impl;
 
 import com.lashou.service.sms.biz.message.config.impl.Channels;
+import com.lashou.service.sms.biz.message.config.impl.ChannelsAccount;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Filter;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Invocation;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Invoker;
@@ -34,11 +35,12 @@ public class SmsOperatorRatioFilter implements Filter {
         operatorSharding(msg,cmcList,cucList,ctcList);
 
         List<Channels> channels = invocation.getContainer().getChannels();
-        SiftChannels siftChannels = new SiftChannels(cmcList, cucList, ctcList, channels).invoke();
+        SiftChannels siftChannels = new SiftChannels(cmcList, cucList, ctcList, channels).invoke().getChannels(msg);
+        invocation.setChannels(siftChannels.getSendChannels());
         return new Result<List>(1,siftChannels.getSmsMsgList());
     }
 
-    public void sort(int[] ratio){
+    public int[] sort(int[] ratio){
         for(int i = 0 ; i < ratio.length-1; i++){
             for(int j = 1 ; j < ratio.length; j++){
                 if(ratio[i] == 0)
@@ -50,10 +52,22 @@ public class SmsOperatorRatioFilter implements Filter {
                 }
             }
         }
+        //处理多余的0
+        int len = 0;
+        int temp[] = new int[ratio.length];
+        for(int k = 0 ; k < ratio.length; k++){
+            if(ratio[k] !=0){
+                temp[len++] = ratio[k];
+            }
+
+        }
+        int arr[] = new int[len];
+        System.arraycopy(temp,0,arr,0,len);
+        return arr;
     }
 
     public String mobiles(List list){
-        String mobiles = null;
+        String mobiles = "";
         for(int i = 0 ; i< list.size(); i++){
             mobiles += list.get(i);
             if(i < list.size()-1){
@@ -113,7 +127,7 @@ public class SmsOperatorRatioFilter implements Filter {
         private List<String> ctcList;
         private List<Channels> channels;
         private List<SmsRequestMsg> list = new ArrayList<>(3);
-        private List<Channels> sendChannels;
+        private List<Channels> sendChannels = new ArrayList<>();
         private int cmc;
         private int cuc;
         private int ctc;
@@ -153,20 +167,17 @@ public class SmsOperatorRatioFilter implements Filter {
 
             cmc = -1;
             if(cmcList.size() >0){
-                sort(cmcRatio);
-                cmc = random(cmcRatio);
+                cmc = random(sort(cmcRatio));
             }
 
             cuc = -1;
             if(cucList.size() >0){
-                sort(cucRatio);
-                cuc = random(cucRatio);
+                cuc = random(sort(cucRatio));
             }
 
             ctc = -1;
             if(ctcList.size() >0){
-                sort(ctcRatio);
-                ctc = random(ctcRatio);
+                ctc = random( sort(ctcRatio));
             }
             return this;
         }
@@ -181,33 +192,39 @@ public class SmsOperatorRatioFilter implements Filter {
                         invoke();
                         getChannels(msg);
                     }
+                    chooseAccount(cs,msg.getSendScope());
                     requestMsg = new SmsRequestMsg();
                     requestMsg.setChannels(cs);
                     requestMsg.setMessage(msg.getMessage());
                     requestMsg.setMobiles(mobiles(cmcList));
                     list.add(requestMsg);
+                    sendChannels.add(cs);
                 }else if(cuc!=-1 && cs.getCUCRatio() == cuc && cuc != 0){
                     if(!cs.isUsed()){
-                        cs.setCMCRatio(0);
+                        cs.setCUCRatio(0);
                         invoke();
                         getChannels(msg);
                     }
+                    chooseAccount(cs,msg.getSendScope());
                     requestMsg = new SmsRequestMsg();
                     requestMsg.setChannels(cs);
                     requestMsg.setMessage(msg.getMessage());
                     requestMsg.setMobiles(mobiles(cucList));
                     list.add(requestMsg);
+                    sendChannels.add(cs);
                 }else if(ctc!=-1 && cs.getCTCRatio() == ctc && ctc != 0){
                     if(!cs.isUsed()){
-                        cs.setCMCRatio(0);
+                        cs.setCTCRatio(0);
                         invoke();
                         getChannels(msg);
                     }
+                    chooseAccount(cs,msg.getSendScope());
                     requestMsg = new SmsRequestMsg();
                     requestMsg.setChannels(cs);
                     requestMsg.setMessage(msg.getMessage());
                     requestMsg.setMobiles(mobiles(ctcList));
                     list.add(requestMsg);
+                    sendChannels.add(cs);
                 }
             }
             return this;
@@ -216,6 +233,22 @@ public class SmsOperatorRatioFilter implements Filter {
 
         public List<SmsRequestMsg> getSmsMsgList(){
             return list;
+        }
+
+        public List<Channels> getSendChannels(){
+            return sendChannels;
+        }
+
+        public void chooseAccount(Channels cl,int type){
+            if(cl.getAccounts()!=null && cl.getAccounts().size()>1){
+                List<ChannelsAccount> accounts = cl.getAccounts();
+                for(int i = 0 ; i< accounts.size(); i++){
+                    ChannelsAccount account = accounts.get(i);
+                    if(account.getType() == type){
+                        cl.setAccount(account);
+                    }
+                }
+            }
         }
     }
 }

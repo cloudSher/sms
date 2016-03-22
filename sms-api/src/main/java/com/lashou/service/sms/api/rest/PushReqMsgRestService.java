@@ -15,7 +15,7 @@ public interface PushReqMsgRestService {
      *  发送短消息接口
      * @return
      */
-    OpResult pushMsg();
+    OpResult pushMsg(String msg);
 
 
     String test(Long id);

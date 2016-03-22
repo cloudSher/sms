@@ -11,6 +11,7 @@ public class MessageContext {
 
     private Map<String,Object> context;
 
+
     public Map<String, Object> getContext() {
         return this.context;
     }

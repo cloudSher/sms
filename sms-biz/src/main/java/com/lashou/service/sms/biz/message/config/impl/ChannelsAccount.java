@@ -7,7 +7,7 @@ public class ChannelsAccount {
 
     private String user;
     private String password;
-    private String type;
+    private int type;
 
     public String getUser() {
         return this.user;
@@ -25,11 +25,11 @@ public class ChannelsAccount {
         this.password = password;
     }
 
-    public String getType() {
-        return this.type;
+    public int getType() {
+        return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 }

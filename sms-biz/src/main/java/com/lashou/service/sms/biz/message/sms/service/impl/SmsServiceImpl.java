@@ -1,21 +1,15 @@
 package com.lashou.service.sms.biz.message.sms.service.impl;
 
 import com.lashou.service.sms.biz.message.config.impl.Channels;
-import com.lashou.service.sms.biz.message.config.impl.Container;
 import com.lashou.service.sms.biz.message.dispatcher.Dispatcher;
-import com.lashou.service.sms.biz.message.sms.SenderPoolFactory;
 import com.lashou.service.sms.biz.message.sms.SmsSender;
-import com.lashou.service.sms.biz.message.sms.SmsSenderPool;
-import com.lashou.service.sms.biz.message.sms.controller.filter.Invocation;
-import com.lashou.service.sms.biz.message.sms.controller.filter.Invoker;
 import com.lashou.service.sms.biz.message.sms.controller.filter.impl.*;
-import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException;
 import com.lashou.service.sms.biz.message.sms.model.SmsRequestMsg;
 import com.lashou.service.sms.biz.message.sms.model.SmsResult;
 import com.lashou.service.sms.biz.message.sms.sender.SmsSenderFactory;
 import com.lashou.service.sms.biz.message.sms.service.SmsService;
-import com.lashou.service.sms.biz.monitor.impl.SmsMsgMonitorData;
-import com.lashou.service.sms.domain.OpResult;
+import com.lashou.service.sms.biz.monitor.impl.SmsMsgResponseData;
+import com.lashou.service.sms.biz.monitor.impl.SmsMsgMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,17 +41,24 @@ public class SmsServiceImpl implements SmsService{
             for(int i = 0 ; i < list.size(); i++){
                 SmsRequestMsg requestMsg = list.get(i);
                  smsResult = sendMsg(requestMsg.getChannels(),requestMsg);
+//
+//                addMonitor(requestMsg,1);
                 if(smsResult.getCode() == 0){
                     //todo 未发送成功之后
-                    //添加监控数据
-                    addMonitor(requestMsg);
-                    Channels channels = dispatcher.reSiftChannels(requestMsg.getChannels());
+                    //添加失败监控数据
+                    addMonitor(requestMsg,0);
+                    Channels channels = dispatcher.reSiftChannels(requestMsg.getChannels(),requestMsg);
                     smsResult = sendMsg(channels, msg);
                     if(smsResult.getCode() == 0){
                         //todo 渠道商你也太牛了，这都请求不到，中彩了
-                        addMonitor(requestMsg);
+                        addMonitor(requestMsg,0);
                     }
+                }else if(smsResult.getCode() == 1){
+                    addMonitor(requestMsg, 1);
                 }
+
+
+
             }
         }
 
@@ -77,14 +78,29 @@ public class SmsServiceImpl implements SmsService{
     }
 
 
-    public void addMonitor(SmsRequestMsg requestMsg){
-        SmsMsgMonitorData monitorData = new SmsMsgMonitorData();
+    public void addMonitor(SmsRequestMsg requestMsg,int code){
+        SmsMsgMonitor monitor =  (SmsMsgMonitor) dispatcher.getContainer().getMonitor();
+        if(code == 1){
+            monitor.incSuccessNum();
+        }else if(code == 0){
+            monitor.incFailNum();
+        }
+        monitor.incChannelsMonitorData(requestMsg.getChannels(),code);
+        SmsMsgResponseData monitorData = new SmsMsgResponseData();
         monitorData.setMobiles(requestMsg.getMobiles());
         monitorData.setCurrTime(new Date());
         monitorData.setChannelsName(requestMsg.getChannels().getChannelName());
         monitorData.setChannelsId(requestMsg.getChannels().getId());
-        monitorData.setDescription("未发送成功短信");
-        dispatcher.sendMonitorData(monitorData);
+        monitorData.setDescription(code == 0?"未发送成功短信":"发送成功");
+        monitor.collectionMonitorData(monitorData);
+        monitor.collectSmsMsgMonitorData();
+        dispatcher.sendMonitorData();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public SmsResult reSendMsg(SmsSender smsSender,SmsRequestMsg msg){

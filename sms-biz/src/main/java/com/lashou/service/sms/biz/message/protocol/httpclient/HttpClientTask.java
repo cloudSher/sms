@@ -25,7 +25,6 @@ public class HttpClientTask {
         this.character = character;
     }
 
-    //todo 可以增加多个任务处理
     public  HttpResult doHttpGet(HttpClient client){
         if(StringUtil.isNullOrEmpty(url)){
             return null;
@@ -38,8 +37,6 @@ public class HttpClientTask {
             logger.info("httpclient send message start .....");
             httpGet = new HttpGet(url);
             response = new HttpResult();
-
-
             httpResponse = client.execute(httpGet);
             if(httpResponse!=null){
                 if(httpResponse.getStatusLine().getStatusCode() == 200){

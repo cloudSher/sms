@@ -16,15 +16,16 @@
         $(".bt").click(function(){
             var data = {
                 "message":
-                        '{"mobiles":"'+$(".mobiles").val()+'","content":"'+$(".content").val()+'"}'};
+                        '{"mobiles":"'+$(".mobiles").val()+'","content":"'+$(".content").val()+'","type":"1","scope":"1"}'};
             console.info(data);
             $.ajax({
                 type:'post',
                 data:data,
+                contentType:'application/json',
                 url:'/services/mps/push',
                 dataType:'json',
                 success: function(data){
-                    alert(data);
+                    alert(data.msg);
                 }
             })
         })
