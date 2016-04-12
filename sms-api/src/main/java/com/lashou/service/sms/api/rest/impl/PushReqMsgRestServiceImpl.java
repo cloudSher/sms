@@ -2,6 +2,7 @@ package com.lashou.service.sms.api.rest.impl;
 
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.alibaba.dubbo.rpc.protocol.rest.support.ContentType;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lashou.service.sms.api.rest.PushReqMsgRestService;
@@ -11,6 +12,7 @@ import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException
 import com.lashou.service.sms.dic.MessageType;
 import com.lashou.service.sms.domain.*;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +38,7 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
 
     private static final Logger logger = Logger.getLogger(PushReqMsgRestServiceImpl.class);
 
-    @Resource
+    @Autowired
     private PushService pushService;
 
     public void setPushService(PushService pushService) {
@@ -60,7 +62,7 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
         System.out.println(str);
 
         JSONObject jo = JSONObject.parseObject(str);
-        jo = (JSONObject) jo.get("message");
+//        jo = (JSONObject) jo.get("message");
 
         long currTime = System.currentTimeMillis();
 
@@ -68,9 +70,30 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
         String mobiles = jo.getString("mobiles");
         String msgType = jo.getString("type");
         String msgScope = jo.getString("scope");
+        String msgPriority = jo.getString("priority");
+
+        if(StringUtil.isNullOrEmpty(msg)){
+            return OpResult.createFailMsg("内容参数不能为空",null);
+        }
+        if(StringUtil.isNullOrEmpty(msgType)){
+            return OpResult.createFailMsg("消息类型参数不能为空",null);
+        }else{
+            if(msgType.equals(MessageType.SMS)){
+                if(StringUtil.isNullOrEmpty(mobiles)){
+                    return OpResult.createFailMsg("手机号参数不能为空",null);
+                }
+            }
+        }
+        if(StringUtil.isNullOrEmpty(msgScope)){
+            return OpResult.createFailMsg("业务类型参数不能为空",null);
+        }
+        if(StringUtil.isNullOrEmpty(msgPriority)){
+            msgPriority = "2";
+        }
 
         Sender sender = new Sender();
-        sender.setType(Integer.valueOf(msgScope));
+        sender.setType(Integer.valueOf(msgType));
+        sender.setScope(Integer.valueOf(msgScope));
         Map<String,Object> resource = new HashMap<>();
         resource.put("mobiles",mobiles);
         sender.setParameters(resource);
@@ -79,6 +102,7 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
         Receiver receiver = new Receiver();
         Header header = new Header();
         header.setType(Integer.valueOf(msgType));
+        header.setPriority(Integer.valueOf(msgPriority));
 
         Body body = new Body();
         body.setSender(sender);
@@ -87,7 +111,7 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
         Message message = new Message();
         message.setBody(body);
         message.setHeader(header);
-        message.setMsgId(UUID.randomUUID().toString());
+        message.setMsgId(UUID.randomUUID().toString().replace("-",""));
         OpResult opResult = pushService.req(message);
         return opResult;
     }
@@ -95,9 +119,55 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
 
 
     @GET
-    @Path("{id: \\d+}")
-    public String test(@PathParam("id") Long id){
-        return "{1,1,1,1+"+id+"}";
+    @Path("test")
+    @Consumes({MediaType.APPLICATION_FORM_URLENCODED})
+    public String test(){
+        HttpServletRequest request = (HttpServletRequest) RpcContext.getContext().getRequest();
+        String mobiles = request.getParameter("mobiles");
+        String content = request.getParameter("content");
+        String type = request.getParameter("type");
+        String scope = request.getParameter("scope");
+        String callback = request.getParameter("jsoncallback");
+
+        if(StringUtil.isNullOrEmpty(content)){
+            return  String.format("%1$s(%2$s)", callback, JSONObject.toJSON(JSONObject.toJSONString(OpResult.createFailMsg("内容参数不能为空",null))));
+        }
+        if(StringUtil.isNullOrEmpty(type)){
+            return String.format("%1$s(%2$s)", callback, JSONObject.toJSON(JSONObject.toJSONString(OpResult.createFailMsg("消息类型参数不能为空", null))));
+        }else{
+            if(type.equals(MessageType.SMS)){
+                if(StringUtil.isNullOrEmpty(mobiles)){
+                    return String.format("%1$s(%2$s)", callback, JSONObject.toJSON(JSONObject.toJSONString(OpResult.createFailMsg("手机号参数不能为空", null))));
+                }
+            }
+        }
+        if(StringUtil.isNullOrEmpty(scope)){
+            return String.format("%1$s(%2$s)", callback, JSONObject.toJSON(JSONObject.toJSONString(OpResult.createFailMsg("业务类型参数不能为空", null))));
+        }
+
+        Sender sender = new Sender();
+        sender.setType(Integer.valueOf(type));
+        sender.setScope(Integer.valueOf(scope));
+        Map<String,Object> resource = new HashMap<>();
+        resource.put("mobiles",mobiles);
+        sender.setParameters(resource);
+        sender.setSendTime(System.currentTimeMillis());
+
+        Receiver receiver = new Receiver();
+        Header header = new Header();
+        header.setType(Integer.valueOf(1));
+
+        Body body = new Body();
+        body.setSender(sender);
+        body.setReceiver(receiver);
+        body.setContent(StringUtil.encoding(content));
+        Message message = new Message();
+        message.setBody(body);
+        message.setHeader(header);
+        message.setMsgId(UUID.randomUUID().toString().replace("-",""));
+        OpResult opResult = pushService.req(message);
+        String result = String.format("%1$s(%2$s)",callback, JSONObject.toJSON(opResult));
+        return result;
     }
 
 

@@ -10,6 +10,8 @@ import com.lashou.service.sms.biz.message.sms.sender.SmsSenderFactory;
 import com.lashou.service.sms.biz.message.sms.service.SmsService;
 import com.lashou.service.sms.biz.monitor.impl.SmsMsgResponseData;
 import com.lashou.service.sms.biz.monitor.impl.SmsMsgMonitor;
+import com.lashou.service.sms.domain.MessageResponse;
+import com.lashou.service.sms.mapper.MessageResponseMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +30,9 @@ public class SmsServiceImpl implements SmsService{
     @Resource
     private Dispatcher dispatcher;
 
+    @Resource
+    private MessageResponseMapper messageResponseMapper;
+
 
     public SmsResult sendMessage(SmsRequestMsg msg){
         Result result = dispatcher.serviceAction(msg);
@@ -37,28 +42,30 @@ public class SmsServiceImpl implements SmsService{
         }
 
         SmsResult smsResult = null;
+        long currentTime = System.currentTimeMillis();
         if(list!=null && list.size() >0){
             for(int i = 0 ; i < list.size(); i++){
                 SmsRequestMsg requestMsg = list.get(i);
-                 smsResult = sendMsg(requestMsg.getChannels(),requestMsg);
-//
-//                addMonitor(requestMsg,1);
-                if(smsResult.getCode() == 0){
-                    //todo 未发送成功之后
-                    //添加失败监控数据
-                    addMonitor(requestMsg,0);
-                    Channels channels = dispatcher.reSiftChannels(requestMsg.getChannels(),requestMsg);
-                    smsResult = sendMsg(channels, msg);
+                if(requestMsg.getSendScope() == 1){
+                    smsResult = sendMsg(requestMsg.getChannels(),requestMsg);
                     if(smsResult.getCode() == 0){
-                        //todo 渠道商你也太牛了，这都请求不到，中彩了
-                        addMonitor(requestMsg,0);
+                        //todo 未发送成功之后
+                        //添加失败监控数据
+                        addMonitor(requestMsg,0,System.currentTimeMillis()-currentTime,smsResult.getResult());
+                        Channels channels = dispatcher.reSiftChannels(requestMsg.getChannels(),requestMsg);
+                        smsResult = sendMsg(channels, msg);
+                        if(smsResult.getCode() == 0){
+                            //渠道商你也太牛了，这都请求不到，中彩了
+                            addMonitor(requestMsg,0,System.currentTimeMillis()-currentTime,smsResult.getResult());
+                        }
+                    }else if(smsResult.getCode() == 1){
+                        addMonitor(requestMsg, 1,System.currentTimeMillis()-currentTime,smsResult.getResult());
                     }
-                }else if(smsResult.getCode() == 1){
-                    addMonitor(requestMsg, 1);
                 }
-
-
-
+                else if(requestMsg.getSendScope() == 2){
+                    System.out.println("=======msg个数======"+list.size());
+                    addMonitor(requestMsg,1,System.currentTimeMillis()-currentTime,null);
+                }
             }
         }
 
@@ -78,7 +85,7 @@ public class SmsServiceImpl implements SmsService{
     }
 
 
-    public void addMonitor(SmsRequestMsg requestMsg,int code){
+    public void addMonitor(SmsRequestMsg requestMsg,int code,long responseTime,Object result){
         SmsMsgMonitor monitor =  (SmsMsgMonitor) dispatcher.getContainer().getMonitor();
         if(code == 1){
             monitor.incSuccessNum();
@@ -93,14 +100,35 @@ public class SmsServiceImpl implements SmsService{
         monitorData.setChannelsId(requestMsg.getChannels().getId());
         monitorData.setDescription(code == 0?"未发送成功短信":"发送成功");
         monitor.collectionMonitorData(monitorData);
-        monitor.collectSmsMsgMonitorData();
-        dispatcher.sendMonitorData();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        monitorData.setResponseTime(new Long(responseTime).intValue());
+        monitorData.setResponseCode(result!=null?(String)result:null);
+        monitorData.setId(requestMsg.getMessageId());
+        monitorData.setName(requestMsg.getMessage());
+        monitorData.setIsSuccess(new Byte("1"));
+        monitorData.setMobileOperator(requestMsg.getMobileOperator());
+        monitorData.setOperatorType(requestMsg.getOperatorType());
+        System.out.println("=========================="+monitorData);
+//        dispatcher.sendMonitorData();
+        insertResponseData(monitorData);
+    }
 
+
+    public void insertResponseData(SmsMsgResponseData responseData){
+        MessageResponse response = new MessageResponse();
+        response.setMessageid(responseData.getId());
+        response.setChannelsid(responseData.getChannelsId());
+        response.setChannelsname(responseData.getChannelsName());
+        response.setChannelsResponseCode(responseData.getResponseCode());
+        response.setChannelsResponseTime(responseData.getResponseTime());
+        response.setCurrenttime(new Date());
+        response.setOperatorType(responseData.getOperatorType());
+        response.setMobilesOperator(responseData.getMobileOperator());
+        response.setDescription(responseData.getDescription());
+        response.setMessagename(responseData.getName());
+        response.setMobiles(responseData.getMobiles());
+        response.setIssuccess(responseData.getIsSuccess());
+        response.setMessagename(responseData.getName());
+        messageResponseMapper.insert(response);
     }
 
     public SmsResult reSendMsg(SmsSender smsSender,SmsRequestMsg msg){

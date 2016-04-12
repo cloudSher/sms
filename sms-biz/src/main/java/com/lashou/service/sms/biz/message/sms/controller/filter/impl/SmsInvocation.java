@@ -24,6 +24,8 @@ public class SmsInvocation implements Invocation {
 
     private List<Channels> channels;
 
+    private List<SmsRequestMsg> msgList;
+
     @Override
     public Invoker getInvoker() {
         return null;
@@ -59,5 +61,13 @@ public class SmsInvocation implements Invocation {
 
     public void setChannels(List<Channels> list){
         this.channels = list;
+    }
+
+    public List<SmsRequestMsg> getMsgList() {
+        return msgList;
+    }
+
+    public void setMsgList(List<SmsRequestMsg> msgList) {
+        this.msgList = msgList;
     }
 }

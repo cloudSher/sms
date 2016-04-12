@@ -16,7 +16,13 @@ public class SmsRequestMsg {
     /** 发送类型 **/
     private int sendScope;
 
+    private String messageId;
+
     private Channels channels;
+
+    private int operatorType;
+
+    private String mobileOperator;
 
     public String getMobiles() {
         return mobiles;
@@ -56,5 +62,29 @@ public class SmsRequestMsg {
 
     public void setSendScope(int sendScope) {
         this.sendScope = sendScope;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public int getOperatorType() {
+        return operatorType;
+    }
+
+    public void setOperatorType(int operatorType) {
+        this.operatorType = operatorType;
+    }
+
+    public String getMobileOperator() {
+        return mobileOperator;
+    }
+
+    public void setMobileOperator(String mobileOperator) {
+        this.mobileOperator = mobileOperator;
     }
 }

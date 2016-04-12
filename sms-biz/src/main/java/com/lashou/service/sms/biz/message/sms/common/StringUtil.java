@@ -62,10 +62,23 @@ public class StringUtil {
 
 
     public static String encoding(String s,String character){
-        try {
-            return new String(s.getBytes(),character==null ? "UTF-8":character);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        if(!isNullOrEmpty(s)) {
+            try {
+                return new String(s.getBytes(), character == null ? "UTF-8" : character);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static String encoding(String s){
+        if(!isNullOrEmpty(s)){
+            try {
+                return new String(s.getBytes("ISO-8859-1"),"UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

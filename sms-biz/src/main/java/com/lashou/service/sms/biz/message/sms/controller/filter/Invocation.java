@@ -2,6 +2,7 @@ package com.lashou.service.sms.biz.message.sms.controller.filter;
 
 import com.lashou.service.sms.biz.message.config.impl.Channels;
 import com.lashou.service.sms.biz.message.config.impl.Container;
+import com.lashou.service.sms.biz.message.sms.controller.filter.impl.Result;
 import com.lashou.service.sms.biz.message.sms.model.SmsRequestMsg;
 
 import java.util.List;
@@ -34,5 +35,10 @@ public interface Invocation {
 
 
     void setChannels(List<Channels> list);
+
+    List<SmsRequestMsg> getMsgList();
+
+    void setMsgList(List<SmsRequestMsg> msgList);
+
 
 }

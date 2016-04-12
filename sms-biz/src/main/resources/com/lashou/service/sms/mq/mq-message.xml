@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+	<bean id="messageRabbitConnectionFactory"
+		class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+		<constructor-arg value="${msg.rabbit.host}" />
+		<property name="port" value="${msg.rabbit.port}" />
+		<property name="virtualHost" value="${msg.rabbit.vhost}" />
+		<property name="username" value="${msg.rabbit.username}" />
+		<property name="password" value="${msg.rabbit.password}" />
+	</bean>
+	<!-- message sender for email and sms -->
+	<bean id="messageRabbitPublisherService" class="com.lashou.service.sms.biz.message.queue.mq.RabbitPublisherService">
+		<constructor-arg ref="messageRabbitConnectionFactory" />
+		<constructor-arg value="message.topic" />
+	</bean>
+
+	<bean id="msgPublisher" class="com.lashou.service.sms.biz.message.queue.MessageRabbitPublishService"></bean>
+
+	<bean id="nrabbitTxManager"
+		  class="org.springframework.amqp.rabbit.transaction.RabbitTransactionManager">
+		<property name="connectionFactory" ref="messageRabbitConnectionFactory" />
+	</bean>
+
+	<import resource="classpath*:com/lashou/service/sms/mq/mq-message-handler.xml"/>
+
+</beans>

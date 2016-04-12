@@ -2,6 +2,14 @@ package com.lashou.service.sms.biz.monitor;
 
 import com.lashou.service.sms.biz.monitor.impl.SmsMsgMonitorData;
 import com.lashou.service.sms.biz.monitor.impl.SmsMsgResponseData;
+import com.lashou.service.sms.domain.MessageResponse;
+import com.lashou.service.sms.mapper.MessageBodyMapper;
+import com.lashou.service.sms.mapper.MessageResponseMapper;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ApplicationObjectSupport;
+
+import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * Created by cloudsher on 2016/3/18.
@@ -15,9 +23,6 @@ public  abstract class AbstractMonitor implements Monitor {
         if(monitorData!=null){
             //todo 处理失败之后的
             System.out.println(monitorData);
-        }
-        if(responseData != null){
-            System.out.println(responseData);
         }
     }
 

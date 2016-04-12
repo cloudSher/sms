@@ -15,6 +15,8 @@ import com.lashou.service.sms.biz.message.sms.model.SmsResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 /**
@@ -35,8 +37,9 @@ public class SmsSenderImpl implements SmsSender {
         try {
             if(channels!=null){
                 String url = getUrl(channels,msg);
+                System.out.println(url);
                 String character = channels.getEncode();
-                HttpClientTask task = new HttpClientTask(url,character);
+                HttpClientTask task = new HttpClientTask(url,channels);
                 HttpResult result = httpClient.execute(task);
                 logger.info("发送短信执行完成，");
                 if(result!=null){
@@ -44,6 +47,7 @@ public class SmsSenderImpl implements SmsSender {
                     if(code == HttpResultCode.SUCCESS){
                         smsResult.setCode(1);
                         smsResult.setMsg("发送短消息成功");
+                        smsResult.setResult(result.getResponseCode());
                         logger.info("发送短信成功");
                     }else{
                         smsResult.setCode(0);
@@ -55,6 +59,7 @@ public class SmsSenderImpl implements SmsSender {
 
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
+            logger.error("smsSenderImpl sendMessage error,",e);
         }
 
         return smsResult;
@@ -63,7 +68,11 @@ public class SmsSenderImpl implements SmsSender {
     public String getUrl(Channels channels,SmsRequestMsg msg){
         StringBuilder str = new StringBuilder();
         String message = msg.getMessage();
-        message = StringUtil.encoding(message,channels.getEncode());
+        try {
+            message =  URLEncoder.encode(message,channels.getEncode());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         str.append(channels.getUrl())
                 .append("?").append(channels.getUserId()).append("=").append(channels.getAccount().getUser())
                 .append("&").append(channels.getPasswordId()).append("=").append(channels.getAccount().getPassword())
@@ -89,6 +98,7 @@ public class SmsSenderImpl implements SmsSender {
 
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
+            logger.error("初始化httpclient出错,",e);
         }
 
     }

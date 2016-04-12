@@ -21,6 +21,16 @@ public class SmsMsgResponseData {
 
     private String description;
 
+    private String responseCode;
+
+    private String mobileOperator;
+
+    private int operatorType;
+
+    private int responseTime;
+
+    private Byte isSuccess;
+
     public String getId() {
         return id;
     }
@@ -77,6 +87,45 @@ public class SmsMsgResponseData {
         this.channelsId = channelsId;
     }
 
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public int getResponseTime() {
+        return responseTime;
+    }
+
+    public void setResponseTime(int responseTime) {
+        this.responseTime = responseTime;
+    }
+
+    public Byte getIsSuccess() {
+        return isSuccess;
+    }
+
+    public void setIsSuccess(Byte isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
+    public String getMobileOperator() {
+        return mobileOperator;
+    }
+
+    public void setMobileOperator(String mobileOperator) {
+        this.mobileOperator = mobileOperator;
+    }
+
+    public int getOperatorType() {
+        return operatorType;
+    }
+
+    public void setOperatorType(int operatorType) {
+        this.operatorType = operatorType;
+    }
 
     @Override
     public String toString() {
@@ -88,6 +137,11 @@ public class SmsMsgResponseData {
                 ", channelsName='" + channelsName + '\'' +
                 ", channelsId='" + channelsId + '\'' +
                 ", description='" + description + '\'' +
+                ", responseCode='" + responseCode + '\'' +
+                ", mobileOperator='" + mobileOperator + '\'' +
+                ", operatorType=" + operatorType +
+                ", responseTime=" + responseTime +
+                ", isSuccess=" + isSuccess +
                 '}';
     }
 }

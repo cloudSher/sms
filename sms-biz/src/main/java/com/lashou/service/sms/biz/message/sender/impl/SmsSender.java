@@ -46,7 +46,8 @@ public class SmsSender implements Sender {
             }
             msg.setMessage(message.getBody().getContent());
             msg.setMobiles(mobiles);
-            msg.setSendScope(message.getHeader().getType());
+            msg.setSendScope(message.getBody().getSender().getScope());
+            msg.setMessageId(message.getMsgId());
         }
         smsService.sendMessage(msg);
 

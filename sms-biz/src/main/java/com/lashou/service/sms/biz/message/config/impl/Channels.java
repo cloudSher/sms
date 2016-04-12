@@ -25,6 +25,8 @@ public class Channels {
 
     private String mobileId;
 
+    private String mobileSplice;
+
     private String msgId;
 
     private String encode;
@@ -62,6 +64,10 @@ public class Channels {
     private int CUCRatio;
 
     private int CTCRatio;
+
+    private String httpResponseCode;
+
+    private String channelsSign;
 
     public String getId() {
         return id;
@@ -279,5 +285,29 @@ public class Channels {
 
     public void setCTCRatio(int CTCRatio) {
         this.CTCRatio = CTCRatio;
+    }
+
+    public String getHttpResponseCode() {
+        return httpResponseCode;
+    }
+
+    public void setHttpResponseCode(String httpResponseCode) {
+        this.httpResponseCode = httpResponseCode;
+    }
+
+    public String getChannelsSign() {
+        return channelsSign;
+    }
+
+    public void setChannelsSign(String channelsSign) {
+        this.channelsSign = channelsSign;
+    }
+
+    public String getMobileSplice() {
+        return mobileSplice;
+    }
+
+    public void setMobileSplice(String mobileSplice) {
+        this.mobileSplice = mobileSplice;
     }
 }

@@ -32,4 +32,14 @@ public class SmsMsgMonitorData {
     public void setLaterNum(long laterNum) {
         this.laterNum = laterNum;
     }
+
+
+    @Override
+    public String toString() {
+        return "SmsMsgMonitorData{" +
+                "succNum=" + succNum +
+                ", failNum=" + failNum +
+                ", laterNum=" + laterNum +
+                '}';
+    }
 }

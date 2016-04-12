@@ -29,9 +29,6 @@ public class SmsWorker implements Worker {
     @Resource
     private ConfigListenerInstance configInstance;
 
-    @Resource
-    private Dispatcher dispatcher;
-
     private volatile boolean reload = false;
 
 
@@ -41,17 +38,9 @@ public class SmsWorker implements Worker {
         long startTime = System.currentTimeMillis();
         while(true){
             try{
-                if(!configInstance.isSignal()){
+                while(!configInstance.isSignal()){
                     reload = false;
                     Thread.sleep(1 * 1000);
-                    synchronized (dispatcher){
-                        if(dispatcher.getContainer().getStatus() == ContrainerStatus.RUNNING && !reload){
-                            dispatcher.reload_Configuration();
-                            configInstance.setSignal(true);
-                            reload = true;
-                        }
-                    }
-
                 }
                 Message message = smsMessageQueue.take(true);
 

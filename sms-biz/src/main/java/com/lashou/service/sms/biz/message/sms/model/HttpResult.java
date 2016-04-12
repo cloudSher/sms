@@ -9,6 +9,7 @@ public class HttpResult {
 
     private int code;
     private String resMsg;
+    private String responseCode;
 
     public int getCode() {
         return code;
@@ -24,5 +25,13 @@ public class HttpResult {
 
     public void setResMsg(String resMsg) {
         this.resMsg = resMsg;
+    }
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
     }
 }

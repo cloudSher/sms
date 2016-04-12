@@ -92,4 +92,8 @@ public class BasicQueue<K,M> implements Queue<K,M>{
         }
     }
 
+    public int queueSize(){
+        return queue.size();
+    }
+
 }

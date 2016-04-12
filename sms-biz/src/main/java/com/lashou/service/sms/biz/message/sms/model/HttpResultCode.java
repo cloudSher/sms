@@ -6,9 +6,11 @@ package com.lashou.service.sms.biz.message.sms.model;
 public class HttpResultCode {
 
 
-    public static final int SUCCESS = 10000;
+    public static final int SUCCESS = 100000;
 
-    private static final int FAIL_SEND = 100201;   //短信发送网关失败
+    public static final int FAIL_SEND = 100201;   //短信发送网关失败
+
+    public static final int RESPONSE_ERROR_CODE = 100301;  //短信返回失败码
 
 
 }

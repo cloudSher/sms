@@ -5,6 +5,7 @@ import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -42,8 +43,12 @@ public class PropertiesConfigurationProvider implements ConfigurationProvider {
         }
         InputStream stream = classLoader.getResourceAsStream(fileName);
         if(stream == null){
-            logger.error("加载资源不存在");
-            throw new InvalidArgumentException("加载的资源不存在");
+            //通过文件系统加载资源
+            stream = new FileInputStream(fileName);
+            if(stream == null){
+                logger.error("加载资源不存在");
+                throw new InvalidArgumentException("加载的资源不存在");
+            }
         }
         properties.load(stream);
         logger.info("properties 资源已经加载成功");

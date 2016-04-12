@@ -28,6 +28,6 @@ public class EncrptUtil {
 
 
     public static void main(String args[]){
-        System.out.println(md5("123"));
+        System.out.println(md5("DXX-BBX-010-1894006950b-d").toUpperCase());
     }
 }

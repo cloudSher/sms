@@ -11,6 +11,7 @@ import com.lashou.service.sms.biz.message.sms.controller.filter.Invoker;
 import com.lashou.service.sms.biz.message.sms.controller.filter.impl.*;
 import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException;
 import com.lashou.service.sms.biz.message.sms.model.SmsRequestMsg;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Random;
@@ -30,6 +31,15 @@ public class Dispatcher {
 
     private volatile boolean isReload = false;
 
+    private String fileName;
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
 
     public void setConfigurationManager(ConfigurationManager configurationManager) {
         this.configurationManager = configurationManager;
@@ -71,6 +81,9 @@ public class Dispatcher {
     public void reload_Configuration(){
         if(this.container!=null && this.container.isRunning()){
             container.setStatus(ContrainerStatus.INITING);
+            container.getChannelsMap().clear();
+            container.getMpsContext().clear();
+            container.getChannels().clear();
             init_Configuration();
             this.isReload =true;
         }
@@ -78,7 +91,7 @@ public class Dispatcher {
 
 
     private ConfigurationManager createConfigurationManager() {
-        return  new ConfigurationManager();
+        return  new ConfigurationManager(fileName);
     }
 
 
@@ -91,6 +104,7 @@ public class Dispatcher {
 //            container.addFilter(new SmsMessageFilter());
 //            container.addFilter(new SmsMobilesFilter());
 //            container.addFilter(new SmsChannelsTypeFilter());
+            container.addFilter(new SmsChannelsSignFilter());
             container.addFilter(new SmsOperatorRatioFilter());
             Invoker invoker = container.invoke();
             invocation = new SmsInvocation();

@@ -18,6 +18,6 @@ public interface PushReqMsgRestService {
     OpResult pushMsg(String msg);
 
 
-    String test(Long id);
+    String test();
 
 }

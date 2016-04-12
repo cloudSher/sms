@@ -19,9 +19,6 @@ public class ConfigListenerWorker implements Worker{
     private String path;
 
     @Resource
-    private Queue smsMessageQueue;
-
-    @Resource
     private Dispatcher dispatcher;
 
     @Resource
@@ -46,8 +43,16 @@ public class ConfigListenerWorker implements Worker{
             while(true){
                 WatchKey key = watchService.take();
                 for(WatchEvent<?> event : key.pollEvents()){
-                    logger.info(Thread.currentThread().getName()+"："+event.context()+":配置文件已经修改");
-                    configInstance.setSignal(false);
+                    if(event.kind() == StandardWatchEventKinds.ENTRY_MODIFY){
+                        logger.info(Thread.currentThread().getName()+"："+event.context()+":配置文件已经修改");
+                        configInstance.setSignal(false);
+                        Thread.sleep(500);
+                        if(!configInstance.isSignal()){
+                            dispatcher.reload_Configuration();
+                            configInstance.setSignal(true);
+                        }
+                    }
+
                 }
                 if(!key.reset()){
                     break;

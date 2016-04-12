@@ -29,14 +29,14 @@
 		<property name="messageConverters">
 			<list>
 				<!--<ref bean="stringHttpMessageConverter" />-->
-				<!-- <ref bean="jsonHttpMessageConverter" /> -->
+				 <ref bean="jsonHttpMessageConverter" />
 			</list>
 		</property>
 	</bean>
 
-		
-	<!-- <bean id="jsonHttpMessageConverter"
-		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" /> -->
+
+	<bean id="jsonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
 
 
 	<!-- 视图解释类 -->

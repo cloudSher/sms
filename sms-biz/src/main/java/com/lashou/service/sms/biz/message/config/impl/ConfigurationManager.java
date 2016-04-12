@@ -15,8 +15,11 @@ public class ConfigurationManager {
     private Logger logger = Logger.getLogger(ConfigurationManager.class);
 
     private Configuration configuration;
-    private final String fileName = "properties/inner.config";
+    private String fileName;
 
+    public ConfigurationManager(String fileName){
+        this.fileName = fileName;
+    }
 
     //TODO how to scan classes file to load config
     public Configuration loadConfig(String fileName) throws IOException, InvalidArgumentException {
@@ -33,6 +36,7 @@ public class ConfigurationManager {
             e.printStackTrace();
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
+            logger.error("加载配置文件失败",e);
         }
         return configuration;
     }

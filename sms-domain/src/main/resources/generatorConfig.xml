@@ -16,7 +16,7 @@
 		</commentGenerator>
 
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-						connectionURL="jdbc:mysql://10.1.33.201/mps"
+						connectionURL="jdbc:mysql://10.1.34.201/mps"
 						userId="root"
 						password="123456" />
 
@@ -28,17 +28,13 @@
 		<javaModelGenerator targetPackage="com.lashou.service.sms.domain" targetProject="src/main/java" />
 
 		<!-- generate xml -->
-		<sqlMapGenerator targetPackage="com.lashou.service.sms.dao" targetProject="src/main/resources" />
+		<sqlMapGenerator targetPackage="com.lashou.service.sms.mapper" targetProject="src/main/resources" />
 
 		<!-- generate Mapper -->
-		<javaClientGenerator targetPackage="com.lashou.service.sms.dao" targetProject="src/main/java" type="XMLMAPPER" />
+		<javaClientGenerator targetPackage="com.lashou.service.sms.mapper" targetProject="src/main/java" type="XMLMAPPER" />
 
 		<table tableName="caller" domainObjectName="Caller">
 			<generatedKey column="callerId" sqlStatement="MySQL" identity="true" />
-		</table>
-
-		<table tableName="message" domainObjectName="Message">
-			<generatedKey column="id" sqlStatement="MySQL" identity="true" />
 		</table>
 
 		<table tableName="context" domainObjectName="MpsContext">
@@ -48,6 +44,15 @@
 		<table tableName="push_message_log" domainObjectName="PushLog">
 			<generatedKey column="id" sqlStatement="MySQL" identity="true" />
 		</table>
+
+		<table tableName="message_body" domainObjectName="MessageBody">
+			<generatedKey column="id" sqlStatement="MySQL" identity="true" />
+		</table>
+
+		<table tableName="message_response" domainObjectName="MessageResponse">
+			<generatedKey column="id" sqlStatement="MySQL" identity="true" />
+		</table>
+
 	</context>
 
 </generatorConfiguration>

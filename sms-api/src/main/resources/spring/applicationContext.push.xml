@@ -17,7 +17,7 @@
     </bean>
     <context:annotation-config />
 
-    <context:component-scan base-package="com.lashou"/>
+    <context:component-scan base-package="com.lashou.service.sms"/>
 
     <bean id="pushService" class="com.lashou.service.sms.biz.impl.PushServiceImpl"></bean>
 
@@ -40,19 +40,19 @@
     <bean id="smsWorker" class="com.lashou.service.sms.biz.message.worker.impl.SmsWorker">
     </bean>
     <bean id="configListenerWorker" class="com.lashou.service.sms.biz.message.worker.impl.ConfigListenerWorker">
-        <property name="path" value=""></property>
+        <property name="path" value="${app.instance.config}/properties/config/"></property>
     </bean>
 
     <!-- =============================================================== -->
     <!-- =========================Sender配置============================ -->
     <!-- =============================================================== -->
-    <bean id="smsSender" class="com.lashou.service.sms.biz.message.sender.impl.SmsSender">
+    <bean id="smsSender" class="com.lashou.service.sms.biz.message.sender.impl.SmsSender" scope="prototype">
     </bean>
 
     <!-- =============================================================== -->
     <!-- =========================SMS配置================================ -->
     <!-- =============================================================== -->
-    <bean id="smsService" class="com.lashou.service.sms.biz.message.sms.service.impl.SmsServiceImpl"/>
+    <bean id="smsService" class="com.lashou.service.sms.biz.message.sms.service.impl.SmsServiceImpl" scope="prototype"/>
     <bean id="mdSenderPool" class="com.lashou.service.sms.biz.message.sms.operators.mandao.MDSenderPool" lazy-init="true"/>
     <bean id="poolFactory" class="com.lashou.service.sms.biz.message.sms.common.SmsSenderPoolFactory">
         <property name="poolMap">
@@ -61,15 +61,18 @@
             </map>
         </property>
     </bean>
-    <bean id="httpClient" class="com.lashou.service.sms.biz.message.sms.common.HttpExecutor"/>
     <bean id="configInstance" class="com.lashou.service.sms.biz.message.worker.impl.ConfigListenerInstance"></bean>
 
 
     <!-- =============================================================== -->
     <!-- =========================Dispatcher配置============================ -->
     <!-- =============================================================== -->
-    <bean id="dispatcher" class="com.lashou.service.sms.biz.message.dispatcher.Dispatcher" init-method="init"></bean>
-    <bean id="queueDispatcher" class="com.lashou.service.sms.biz.message.dispatcher.QueueDispatcher"></bean>
+    <bean id="dispatcher" class="com.lashou.service.sms.biz.message.dispatcher.Dispatcher" init-method="init">
+        <property name="fileName" value="${app.instance.config}/properties/config/inner.config"></property>
+    </bean>
+    <bean id="queueDispatcher" class="com.lashou.service.sms.biz.message.dispatcher.QueueDispatcher">
+        <property name="priority" value="${push.msg.queue.priority}"></property>
+    </bean>
 
     <!-- =============================================================== -->
     <!-- =========================StartUp配置============================ -->
@@ -78,5 +81,6 @@
         <property name="smsWorkerThreand" value="3"></property>
     </bean>
 
-
+    <import resource="classpath*:com/lashou/service/sms/message-service-dao.xml"/>
+    <import resource="classpath*:com/lashou/service/sms/mq/mq-message.xml"/>
 </beans>

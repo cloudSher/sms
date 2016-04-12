@@ -1,4 +1,4 @@
-package com.lashou.service.sms.dao;
+package com.lashou.service.sms.mapper;
 
 import com.lashou.service.sms.domain.MpsContext;
 import com.lashou.service.sms.domain.MpsContextExample;

@@ -11,6 +11,7 @@ public class Sender {
     private String id;
     private String name;
     private int type;
+    private int scope;
     private Map<String ,Object> parameters;
     private long  sendTime;
 
@@ -52,5 +53,13 @@ public class Sender {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getScope() {
+        return scope;
+    }
+
+    public void setScope(int scope) {
+        this.scope = scope;
     }
 }

@@ -2,10 +2,12 @@ package com.lashou.service.sms.biz.message.sms.controller.filter.impl;
 
 import com.lashou.service.sms.biz.message.config.impl.Channels;
 import com.lashou.service.sms.biz.message.config.impl.ChannelsAccount;
+import com.lashou.service.sms.biz.message.sms.common.StringUtil;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Filter;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Invocation;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Invoker;
 import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException;
+import com.lashou.service.sms.biz.message.sms.model.SmsOperatorType;
 import com.lashou.service.sms.biz.message.sms.model.SmsRequestMsg;
 
 import java.util.ArrayList;
@@ -37,33 +39,42 @@ public class SmsOperatorRatioFilter implements Filter {
         List<Channels> channels = invocation.getContainer().getChannels();
         SiftChannels siftChannels = new SiftChannels(cmcList, cucList, ctcList, channels).invoke().getChannels(msg);
         invocation.setChannels(siftChannels.getSendChannels());
-        return new Result<List>(1,siftChannels.getSmsMsgList());
+        invocation.setMsgList(siftChannels.getSmsMsgList());
+        return invoker.invoke(invocation);
     }
 
-    public int[] sort(int[] ratio){
+    public Object[] sort(int[] ratio,String[] cId){
         for(int i = 0 ; i < ratio.length-1; i++){
-            for(int j = 1 ; j < ratio.length; j++){
-                if(ratio[i] == 0)
-                    continue;
+            for(int j = i + 1 ; j < ratio.length; j++){
                 if(ratio[i] > ratio[j]){
                     int temp = ratio[i];
                     ratio[i] = ratio[j];
                     ratio[j] = temp;
+                    String tmp = cId[i];
+                    cId[i] = cId[j];
+                    cId[j] = tmp;
                 }
             }
         }
         //处理多余的0
-        int len = 0;
+        int len = 0,l =0;
         int temp[] = new int[ratio.length];
+        String[] tmp = new String[ratio.length];
+
         for(int k = 0 ; k < ratio.length; k++){
             if(ratio[k] !=0){
                 temp[len++] = ratio[k];
+                tmp[l++] = cId[k];
             }
 
         }
         int arr[] = new int[len];
+        String arr1[] = new String[l];
         System.arraycopy(temp,0,arr,0,len);
-        return arr;
+        System.arraycopy(tmp,0,arr1,0,l);
+
+        Object[] obj = new Object[]{arr,arr1};
+        return obj;
     }
 
     public String mobiles(List list){
@@ -89,13 +100,16 @@ public class SmsOperatorRatioFilter implements Filter {
 
         for(int i = 0 ; i<mobileArr.length;i++){
             String phone = mobileArr[i];
-            if(phone.matches("^1(3[4-9]|5[012789]|8[78])\\d{8}$")){ //移动手机号
-                cmcList.add(phone);
-            }else if(phone.matches("^18[09]\\d{8}$")){ //电信手机号
-                ctcList.add(phone);
-            }else if(phone.matches("^1(3[0-2]|5[56]|8[56])\\d{8}$")){  //联通手机号
-                cucList.add(phone);
-            }
+            if(!StringUtil.isNullOrEmpty(phone))
+                if(phone.matches("^1(3[4-9]|5[012789]|8[123478])\\d{8}$")){ //移动手机号
+                    cmcList.add(phone);
+                }else if(phone.matches("^1(33|53|8[09])\\d{8}$")){ //电信手机号
+                    ctcList.add(phone);
+                }else if(phone.matches("^1(3[0-2]|5[56]|8[56])\\d{8}$")){  //联通手机号
+                    cucList.add(phone);
+                }else{
+                    cmcList.add(phone);
+                }
         }
 
     }
@@ -117,7 +131,7 @@ public class SmsOperatorRatioFilter implements Filter {
                 break;
             }
         }
-        return radio[index];
+        return index;
     }
 
 
@@ -128,9 +142,9 @@ public class SmsOperatorRatioFilter implements Filter {
         private List<Channels> channels;
         private List<SmsRequestMsg> list = new ArrayList<>(3);
         private List<Channels> sendChannels = new ArrayList<>();
-        private int cmc;
-        private int cuc;
-        private int ctc;
+        private String cmc;
+        private String cuc;
+        private String ctc;
 
         public SiftChannels(List<String> cmcList, List<String> cucList, List<String> ctcList, List<Channels> channels) {
             this.cmcList = cmcList;
@@ -139,22 +153,15 @@ public class SmsOperatorRatioFilter implements Filter {
             this.channels = channels;
         }
 
-        public int getCmc() {
-            return cmc;
-        }
-
-        public int getCuc() {
-            return cuc;
-        }
-
-        public int getCtc() {
-            return ctc;
-        }
 
         public SiftChannels invoke() {
             int[]  cmcRatio = new int[channels.size()];
             int[]  cucRatio = new int[channels.size()];
             int[]  ctcRatio = new int[cucRatio.length];
+
+            String[] cmId = new String[ctcRatio.length];
+            String[] cuId = new String[ctcRatio.length];
+            String[] ctId = new String[cmId.length];
 
             if(channels!=null){
                 for(int i = 0 ; i< channels.size(); i++){
@@ -162,22 +169,31 @@ public class SmsOperatorRatioFilter implements Filter {
                     cmcRatio[i] = ch.getCMCRatio();
                     cucRatio[i] = ch.getCUCRatio();
                     ctcRatio[i] = ch.getCTCRatio();
+                    cmId[i] = ch.getId();
+                    cuId[i] = ch.getId();
+                    ctId[i] = ch.getId();
                 }
             }
 
-            cmc = -1;
+            cmc = "";
             if(cmcList.size() >0){
-                cmc = random(sort(cmcRatio));
+                Object obj[] = sort(cmcRatio,cmId);
+                String[] str = (String[]) obj[1];
+                cmc = str[random((int[])obj[0])];
             }
 
-            cuc = -1;
+            cuc = "";
             if(cucList.size() >0){
-                cuc = random(sort(cucRatio));
+                Object obj[] = sort(cucRatio,cuId);
+                String[] str = (String[]) obj[1];
+                cuc = str[random((int[])obj[0])];
             }
 
-            ctc = -1;
+            ctc = "";
             if(ctcList.size() >0){
-                ctc = random( sort(ctcRatio));
+                Object obj[] = sort(ctcRatio,ctId);
+                String[] str = (String[]) obj[1];
+                ctc = str[random((int[])obj[0])];
             }
             return this;
         }
@@ -186,7 +202,7 @@ public class SmsOperatorRatioFilter implements Filter {
             SmsRequestMsg requestMsg;
             for(int i = 0 ; i< channels.size(); i++){
                 Channels cs = channels.get(i);
-                if(cmc!=-1 && cs.getCMCRatio() == cmc && cmc!=0){
+                if(cmc!="" && cs.getId().equals(cmc)){
                     if(!cs.isUsed()){
                         cs.setCMCRatio(0);
                         invoke();
@@ -195,11 +211,17 @@ public class SmsOperatorRatioFilter implements Filter {
                     chooseAccount(cs,msg.getSendScope());
                     requestMsg = new SmsRequestMsg();
                     requestMsg.setChannels(cs);
+                    requestMsg.setMessageId(msg.getMessageId());
+                    requestMsg.setSendScope(msg.getSendScope());
+                    requestMsg.setChannel(cs.getChannelName());
                     requestMsg.setMessage(msg.getMessage());
+                    requestMsg.setOperatorType(SmsOperatorType.CMCC);
+                    requestMsg.setMobileOperator("cmc");
                     requestMsg.setMobiles(mobiles(cmcList));
                     list.add(requestMsg);
                     sendChannels.add(cs);
-                }else if(cuc!=-1 && cs.getCUCRatio() == cuc && cuc != 0){
+                }
+                if(cuc!="" && cs.getId().equals(cuc)){
                     if(!cs.isUsed()){
                         cs.setCUCRatio(0);
                         invoke();
@@ -208,11 +230,17 @@ public class SmsOperatorRatioFilter implements Filter {
                     chooseAccount(cs,msg.getSendScope());
                     requestMsg = new SmsRequestMsg();
                     requestMsg.setChannels(cs);
+                    requestMsg.setMessageId(msg.getMessageId());
+                    requestMsg.setSendScope(msg.getSendScope());
+                    requestMsg.setChannel(cs.getChannelName());
                     requestMsg.setMessage(msg.getMessage());
+                    requestMsg.setMobileOperator("cuc");
+                    requestMsg.setOperatorType(SmsOperatorType.CUCC);
                     requestMsg.setMobiles(mobiles(cucList));
                     list.add(requestMsg);
                     sendChannels.add(cs);
-                }else if(ctc!=-1 && cs.getCTCRatio() == ctc && ctc != 0){
+                }
+                if(ctc!="" && cs.getId().equals(ctc)){
                     if(!cs.isUsed()){
                         cs.setCTCRatio(0);
                         invoke();
@@ -221,6 +249,11 @@ public class SmsOperatorRatioFilter implements Filter {
                     chooseAccount(cs,msg.getSendScope());
                     requestMsg = new SmsRequestMsg();
                     requestMsg.setChannels(cs);
+                    requestMsg.setMessageId(msg.getMessageId());
+                    requestMsg.setSendScope(msg.getSendScope());
+                    requestMsg.setChannel(cs.getChannelName());
+                    requestMsg.setMobileOperator("ctc");
+                    requestMsg.setOperatorType(SmsOperatorType.CTCC);
                     requestMsg.setMessage(msg.getMessage());
                     requestMsg.setMobiles(mobiles(ctcList));
                     list.add(requestMsg);

@@ -87,6 +87,7 @@ public class DefaultConfiguration<T> implements Configuration<T>{
             Map.Entry<?, ?> next = iterator.next();
             String key = (String) next.getKey();
             Object value = next.getValue();
+            value = StringUtil.encoding(value.toString());
             if(!StringUtil.isNullOrEmpty(key)){
                 if(key.contains(".")){
                     String pre_key = key.substring(0,key.indexOf("."));
@@ -106,6 +107,9 @@ public class DefaultConfiguration<T> implements Configuration<T>{
 
 
     }
+
+
+
 
 
 }

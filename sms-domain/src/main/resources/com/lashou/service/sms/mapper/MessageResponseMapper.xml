@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lashou.service.sms.mapper.MessageResponseMapper" >
+  <resultMap id="BaseResultMap" type="com.lashou.service.sms.domain.MessageResponse" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="messageId" property="messageid" jdbcType="VARCHAR" />
+    <result column="messageName" property="messagename" jdbcType="VARCHAR" />
+    <result column="mobiles" property="mobiles" jdbcType="VARCHAR" />
+    <result column="mobiles_operator" property="mobilesOperator" jdbcType="VARCHAR" />
+    <result column="operator_type" property="operatorType" jdbcType="INTEGER" />
+    <result column="channelsName" property="channelsname" jdbcType="VARCHAR" />
+    <result column="channelsId" property="channelsid" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="currentTime" property="currenttime" jdbcType="TIMESTAMP" />
+    <result column="channels_response_code" property="channelsResponseCode" jdbcType="VARCHAR" />
+    <result column="channels_response_time" property="channelsResponseTime" jdbcType="INTEGER" />
+    <result column="isSuccess" property="issuccess" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, messageId, messageName, mobiles, mobiles_operator, operator_type, channelsName, 
+    channelsId, description, currentTime, channels_response_code, channels_response_time, 
+    isSuccess
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lashou.service.sms.domain.MessageResponseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from message_response
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart >= 0" >
+       limit ${limitStart} , ${limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from message_response
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from message_response
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lashou.service.sms.domain.MessageResponseExample" >
+    delete from message_response
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lashou.service.sms.domain.MessageResponse" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into message_response (messageId, messageName, mobiles, 
+      mobiles_operator, operator_type, channelsName, 
+      channelsId, description, currentTime, 
+      channels_response_code, channels_response_time, 
+      isSuccess)
+    values (#{messageid,jdbcType=VARCHAR}, #{messagename,jdbcType=VARCHAR}, #{mobiles,jdbcType=VARCHAR}, 
+      #{mobilesOperator,jdbcType=VARCHAR}, #{operatorType,jdbcType=INTEGER}, #{channelsname,jdbcType=VARCHAR}, 
+      #{channelsid,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{currenttime,jdbcType=TIMESTAMP}, 
+      #{channelsResponseCode,jdbcType=VARCHAR}, #{channelsResponseTime,jdbcType=INTEGER}, 
+      #{issuccess,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lashou.service.sms.domain.MessageResponse" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into message_response
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="messageid != null" >
+        messageId,
+      </if>
+      <if test="messagename != null" >
+        messageName,
+      </if>
+      <if test="mobiles != null" >
+        mobiles,
+      </if>
+      <if test="mobilesOperator != null" >
+        mobiles_operator,
+      </if>
+      <if test="operatorType != null" >
+        operator_type,
+      </if>
+      <if test="channelsname != null" >
+        channelsName,
+      </if>
+      <if test="channelsid != null" >
+        channelsId,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="currenttime != null" >
+        currentTime,
+      </if>
+      <if test="channelsResponseCode != null" >
+        channels_response_code,
+      </if>
+      <if test="channelsResponseTime != null" >
+        channels_response_time,
+      </if>
+      <if test="issuccess != null" >
+        isSuccess,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="messageid != null" >
+        #{messageid,jdbcType=VARCHAR},
+      </if>
+      <if test="messagename != null" >
+        #{messagename,jdbcType=VARCHAR},
+      </if>
+      <if test="mobiles != null" >
+        #{mobiles,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilesOperator != null" >
+        #{mobilesOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorType != null" >
+        #{operatorType,jdbcType=INTEGER},
+      </if>
+      <if test="channelsname != null" >
+        #{channelsname,jdbcType=VARCHAR},
+      </if>
+      <if test="channelsid != null" >
+        #{channelsid,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="currenttime != null" >
+        #{currenttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="channelsResponseCode != null" >
+        #{channelsResponseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelsResponseTime != null" >
+        #{channelsResponseTime,jdbcType=INTEGER},
+      </if>
+      <if test="issuccess != null" >
+        #{issuccess,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lashou.service.sms.domain.MessageResponseExample" resultType="java.lang.Integer" >
+    select count(*) from message_response
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update message_response
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.messageid != null" >
+        messageId = #{record.messageid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.messagename != null" >
+        messageName = #{record.messagename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobiles != null" >
+        mobiles = #{record.mobiles,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobilesOperator != null" >
+        mobiles_operator = #{record.mobilesOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operatorType != null" >
+        operator_type = #{record.operatorType,jdbcType=INTEGER},
+      </if>
+      <if test="record.channelsname != null" >
+        channelsName = #{record.channelsname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelsid != null" >
+        channelsId = #{record.channelsid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currenttime != null" >
+        currentTime = #{record.currenttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.channelsResponseCode != null" >
+        channels_response_code = #{record.channelsResponseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelsResponseTime != null" >
+        channels_response_time = #{record.channelsResponseTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.issuccess != null" >
+        isSuccess = #{record.issuccess,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update message_response
+    set id = #{record.id,jdbcType=INTEGER},
+      messageId = #{record.messageid,jdbcType=VARCHAR},
+      messageName = #{record.messagename,jdbcType=VARCHAR},
+      mobiles = #{record.mobiles,jdbcType=VARCHAR},
+      mobiles_operator = #{record.mobilesOperator,jdbcType=VARCHAR},
+      operator_type = #{record.operatorType,jdbcType=INTEGER},
+      channelsName = #{record.channelsname,jdbcType=VARCHAR},
+      channelsId = #{record.channelsid,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      currentTime = #{record.currenttime,jdbcType=TIMESTAMP},
+      channels_response_code = #{record.channelsResponseCode,jdbcType=VARCHAR},
+      channels_response_time = #{record.channelsResponseTime,jdbcType=INTEGER},
+      isSuccess = #{record.issuccess,jdbcType=TINYINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lashou.service.sms.domain.MessageResponse" >
+    update message_response
+    <set >
+      <if test="messageid != null" >
+        messageId = #{messageid,jdbcType=VARCHAR},
+      </if>
+      <if test="messagename != null" >
+        messageName = #{messagename,jdbcType=VARCHAR},
+      </if>
+      <if test="mobiles != null" >
+        mobiles = #{mobiles,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilesOperator != null" >
+        mobiles_operator = #{mobilesOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorType != null" >
+        operator_type = #{operatorType,jdbcType=INTEGER},
+      </if>
+      <if test="channelsname != null" >
+        channelsName = #{channelsname,jdbcType=VARCHAR},
+      </if>
+      <if test="channelsid != null" >
+        channelsId = #{channelsid,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="currenttime != null" >
+        currentTime = #{currenttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="channelsResponseCode != null" >
+        channels_response_code = #{channelsResponseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelsResponseTime != null" >
+        channels_response_time = #{channelsResponseTime,jdbcType=INTEGER},
+      </if>
+      <if test="issuccess != null" >
+        isSuccess = #{issuccess,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lashou.service.sms.domain.MessageResponse" >
+    update message_response
+    set messageId = #{messageid,jdbcType=VARCHAR},
+      messageName = #{messagename,jdbcType=VARCHAR},
+      mobiles = #{mobiles,jdbcType=VARCHAR},
+      mobiles_operator = #{mobilesOperator,jdbcType=VARCHAR},
+      operator_type = #{operatorType,jdbcType=INTEGER},
+      channelsName = #{channelsname,jdbcType=VARCHAR},
+      channelsId = #{channelsid,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      currentTime = #{currenttime,jdbcType=TIMESTAMP},
+      channels_response_code = #{channelsResponseCode,jdbcType=VARCHAR},
+      channels_response_time = #{channelsResponseTime,jdbcType=INTEGER},
+      isSuccess = #{issuccess,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
