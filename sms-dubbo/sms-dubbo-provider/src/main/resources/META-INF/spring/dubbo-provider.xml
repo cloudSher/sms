@@ -74,7 +74,7 @@
 	<!--<dubbo:service interface="com.lashou.service.mps.api.facade.PushReqMsgRestService" ref="PushReqMsgRestService"  protocol="rest"  timeout="5000" connections="100" validation="true"/>-->
     <dubbo:service interface="com.lashou.service.sms.api.rest.PushReqMsgRestService" ref="PushReqMsgRestService"  protocol="rest" validation="true"/>
 
-    <bean id="PushReqMsgRestService" class="com.lashou.service.sms.api.rest.impl.PushReqMsgRestServiceImpl"/>
+    <bean id="PushReqMsgRestService" class="com.lashou.service.sms.dubbo.rest.impl.PushReqMsgRestServiceImpl"/>
 
     <import resource="classpath*:spring/*.xml"/>
 

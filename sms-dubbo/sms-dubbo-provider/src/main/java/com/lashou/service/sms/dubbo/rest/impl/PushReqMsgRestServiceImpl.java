@@ -1,24 +1,22 @@
-package com.lashou.service.sms.api.rest.impl;
+package com.lashou.service.sms.dubbo.rest.impl;
 
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.alibaba.dubbo.rpc.protocol.rest.support.ContentType;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lashou.service.sms.api.rest.PushReqMsgRestService;
 import com.lashou.service.sms.biz.PushService;
 import com.lashou.service.sms.biz.message.sms.common.StringUtil;
-import com.lashou.service.sms.biz.message.sms.exception.InvalidArgumentException;
 import com.lashou.service.sms.dic.MessageType;
 import com.lashou.service.sms.domain.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * <p> PushReqMsgRestServiceImpl</p>
@@ -56,7 +54,7 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
     public OpResult pushMsg(String str) {
         logger.info("push api start....");
         if(StringUtil.isNullOrEmpty(str)){
-            return OpResult.createFailMsg("参数不能为空",null);
+            return OpResult.createFailMsg("参数不能为空", null);
         }
 
         System.out.println(str);

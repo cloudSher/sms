@@ -21,6 +21,7 @@
         <module>sms-api</module>
         <module>sms-biz</module>
         <module>sms-domain</module>
+        <module>sms-dubbo</module>
     </modules>
 
 
