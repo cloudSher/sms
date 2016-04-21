@@ -14,7 +14,7 @@
  - limitations under the License.
 -->
 <assembly>
-	<id>assembly</id>
+	<!--<id>assembly</id>-->
 	<formats>
 		<format>zip</format>
 	</formats>
