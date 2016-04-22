@@ -1,7 +1,7 @@
 package com.lashou.service.sms.dubbo.customer.impl;
 
 
-import com.lashou.service.sms.api.rest.PushReqMsgRestService;
+import com.lashou.service.sms.api.rpc.PushReqMsgService;
 
 /**
  * Created by cloudsher on 2016/4/21.
@@ -9,9 +9,9 @@ import com.lashou.service.sms.api.rest.PushReqMsgRestService;
 public class PushMsgServiceImpl {
 
 
-    private PushReqMsgRestService pushReqMsgService;
+    private PushReqMsgService pushReqMsgService;
 
-    public void setPushReqMsgService(PushReqMsgRestService pushReqMsgService) {
+    public void setPushReqMsgService(PushReqMsgService pushReqMsgService) {
         this.pushReqMsgService = pushReqMsgService;
     }
 

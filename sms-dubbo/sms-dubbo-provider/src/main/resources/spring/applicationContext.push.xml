@@ -82,5 +82,5 @@
     </bean>
 
     <import resource="classpath*:com/lashou/service/sms/message-service-dao.xml"/>
-    <import resource="classpath*:com/lashou/service/sms/mq/mq-message.xml"/>
+    <!--<import resource="classpath*:com/lashou/service/sms/mq/mq-message.xml"/>-->
 </beans>

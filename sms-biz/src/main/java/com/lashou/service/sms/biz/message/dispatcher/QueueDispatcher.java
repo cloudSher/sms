@@ -23,8 +23,8 @@ public class QueueDispatcher {
     @Resource
     private BasicQueue pushMessageQueue;
 
-    @Resource
-    private MessageRabbitPublishService msgPublisher;
+//    @Resource
+//    private MessageRabbitPublishService msgPublisher;
 
     private int priority;
 
@@ -41,7 +41,7 @@ public class QueueDispatcher {
                     if(message.getHeader().getPriority() <= priority){
                         smsMessageQueue.put(message);
                     }else if(message.getHeader().getPriority() > priority){
-                        msgPublisher.sendMessage(message);
+//                        msgPublisher.sendMessage(message);
                     }
                     break;
                 case EMAIL:
