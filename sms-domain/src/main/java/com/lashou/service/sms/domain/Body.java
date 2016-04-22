@@ -1,9 +1,13 @@
 package com.lashou.service.sms.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by sher on 3/8/16.
  */
-public class Body {
+public class Body implements Serializable{
+
+    private static final long serialVersionUID = 1284088652274404421L;
 
     private Sender sender;
     private Receiver receiver;

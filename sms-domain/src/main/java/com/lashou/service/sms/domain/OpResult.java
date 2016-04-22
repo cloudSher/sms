@@ -1,5 +1,6 @@
 package com.lashou.service.sms.domain;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -12,7 +13,9 @@ import java.util.Objects;
  * @version 1.0
  * @date 2016/1/11
  */
-public class OpResult<R> {
+public class OpResult<R> implements Serializable {
+
+    private static final long serialVersionUID = 1607549474518421276L;
 
     /**返回code 200是成功，400 错误 **/
     private int code;
@@ -28,6 +31,10 @@ public class OpResult<R> {
         this.msg = msg;
         this.status = status;
         this.result = result;
+    }
+
+    public OpResult(){
+
     }
 
     public R getResult() {

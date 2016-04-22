@@ -1,13 +1,15 @@
 package com.lashou.service.sms.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
 /**
  * Created by sher on 3/8/16.
  */
-public class Receiver {
+public class Receiver implements Serializable{
 
+    private static final long serialVersionUID = 7001637412192612802L;
     private String id;
     private int type;
     private Map<String ,Object> parameters;

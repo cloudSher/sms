@@ -1,12 +1,14 @@
 package com.lashou.service.sms.domain;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Created by sher on 3/8/16.
  */
-public class Header {
+public class Header implements Serializable{
 
+    private static final long serialVersionUID = 4895767103457574327L;
     private String appId;
     private int type;
     private Map<String,Object> parameters;
