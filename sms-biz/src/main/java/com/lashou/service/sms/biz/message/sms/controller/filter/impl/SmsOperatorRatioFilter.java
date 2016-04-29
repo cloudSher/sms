@@ -202,6 +202,9 @@ public class SmsOperatorRatioFilter implements Filter {
             SmsRequestMsg requestMsg;
             for(int i = 0 ; i< channels.size(); i++){
                 Channels cs = channels.get(i);
+                if(cs.getIsPrivate() == 1){
+                    continue;
+                }
                 if(cmc!="" && cs.getId().equals(cmc)){
                     if(!cs.isUsed()){
                         cs.setCMCRatio(0);

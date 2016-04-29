@@ -39,15 +39,18 @@ public class SmsSender implements Sender {
         logger.info("发短信：", message.getMsgId());
         SmsRequestMsg msg = new SmsRequestMsg();
         String mobiles = "";
+        String channel = "";
         if(message != null){
             Map<String, Object> parameters = message.getBody().getSender().getParameters();
             if(parameters!=null){
                 mobiles = (String) parameters.get("mobiles");
+                channel = (String) parameters.get("channel_id");
             }
             msg.setMessage(message.getBody().getContent());
             msg.setMobiles(mobiles);
             msg.setSendScope(message.getBody().getSender().getScope());
             msg.setMessageId(message.getMsgId());
+            msg.setChannel(channel);
         }
         smsService.sendMessage(msg);
 

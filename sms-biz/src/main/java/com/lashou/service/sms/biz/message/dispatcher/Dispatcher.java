@@ -101,11 +101,11 @@ public class Dispatcher {
         try {
             Container container = this.container;
             container.setFilterChain(new FilterChain());
-//            container.addFilter(new SmsMessageFilter());
 //            container.addFilter(new SmsMobilesFilter());
 //            container.addFilter(new SmsChannelsTypeFilter());
             container.addFilter(new SmsChannelsSignFilter());
             container.addFilter(new SmsOperatorRatioFilter());
+            container.addFilter(new SmsMessageFilter());
             Invoker invoker = container.invoke();
             invocation = new SmsInvocation();
             invocation.setAttachment(msg);

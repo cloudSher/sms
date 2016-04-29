@@ -14,6 +14,7 @@
     <modules>
         <module>sms-dubbo-provider</module>
         <module>sms-dubbo-consumer</module>
+        <module>../sms-admin</module>
     </modules>
 
 

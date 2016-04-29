@@ -1,5 +1,6 @@
 package com.lashou.service.sms.dubbo.rpc.impl;
 
+import com.alibaba.dubbo.container.Main;
 import com.alibaba.fastjson.JSONObject;
 import com.lashou.service.sms.api.rpc.PushReqMsgService;
 import com.lashou.service.sms.biz.PushService;
@@ -42,6 +43,7 @@ public class PushReqMsgRpcServiceImpl implements PushReqMsgService {
         String msgType = jo.getString("type");
         String msgScope = jo.getString("scope");
         String msgPriority = jo.getString("priority");
+        String channel = jo.getString("channel_id");
 
         if(StringUtil.isNullOrEmpty(msg)){
             return OpResult.createFailMsg("内容参数不能为空",null);
@@ -67,6 +69,7 @@ public class PushReqMsgRpcServiceImpl implements PushReqMsgService {
         sender.setScope(Integer.valueOf(msgScope));
         Map<String,Object> resource = new HashMap<>();
         resource.put("mobiles",mobiles);
+        resource.put("channel_id",channel);
         sender.setParameters(resource);
         sender.setSendTime(currTime);
 
@@ -90,6 +93,11 @@ public class PushReqMsgRpcServiceImpl implements PushReqMsgService {
     @Override
     public String test() {
         return null;
+    }
+
+    public static void main(String args[]){
+        Main main = new Main();
+        main.main(null);
     }
 
 }

@@ -1,9 +1,14 @@
 package com.lashou.service.sms.biz.message.sms.controller.filter.impl;
 
+import com.lashou.service.sms.biz.message.config.impl.Channels;
+import com.lashou.service.sms.biz.message.sms.common.StringUtil;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Filter;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Invocation;
 import com.lashou.service.sms.biz.message.sms.controller.filter.Invoker;
 import com.lashou.service.sms.biz.message.sms.model.SmsRequestMsg;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author cloudsher
@@ -17,13 +22,21 @@ public class SmsMessageFilter implements Filter {
     public Result invoke(Invoker invoker, Invocation invocation) {
         SmsInvocation smsInv = (SmsInvocation) invocation;
         SmsRequestMsg msg = smsInv.getAttachment();
+        List<Channels> channels = smsInv.getChannels();
         if(msg != null){
-            String content = msg.getMessage();
-            if(content != null && content.trim().length()!=0){
-
+            String channel = msg.getChannel();
+            if(StringUtil.isNullOrEmpty(channel)){
+                return invoker.invoke(invocation);
+            }
+            if(channels!=null && channels.size() >0){
+                for(Channels c : channels){
+                    if(c.getId().equals(channel)){
+                        msg.setChannels(c);
+                        smsInv.setMsgList(Arrays.asList(msg));
+                    }
+                }
             }
         }
-        System.out.println("message filter");
-        return invoker.invoke(invocation);
+        return new Result(1,smsInv.getMsgList());
     }
 }

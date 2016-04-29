@@ -69,6 +69,8 @@ public class Channels {
 
     private String channelsSign;
 
+    private int isPrivate;
+
     public String getId() {
         return id;
     }
@@ -309,5 +311,13 @@ public class Channels {
 
     public void setMobileSplice(String mobileSplice) {
         this.mobileSplice = mobileSplice;
+    }
+
+    public int getIsPrivate() {
+        return isPrivate;
+    }
+
+    public void setIsPrivate(int isPrivate) {
+        this.isPrivate = isPrivate;
     }
 }
