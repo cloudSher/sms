@@ -1,0 +1,159 @@
+<link rel="stylesheet" href="../../../css/bootstrap-theme.css"/>
+<link rel="stylesheet" href="../../../css/bootstrap.min.css"/>
+<script src="../../../js/jquery-2.1.1.js"></script>
+<script src="../../../js/message.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
+<style>
+    .table td,th{
+        text-align: center;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <h3>短信管理</h3>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>运营商</th>
+                    <th>渠道商</th>
+                    <th>占比</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td rowspan="5"><span style="margin-top: 80px;display: block; ">移动</span></td>
+                    <td>雨辰润联</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger btn-primary"
+                     data-toggle="modal" data-target="#modal" data-whatever="雨辰润联" data-name="移动|10" data-action="/sms/admin/modify/cmc/yc">修改</button> </td>
+                </tr>
+                <tr>
+                    <td >2</td>
+                    <td>鸿联</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td >3</td>
+                    <td>漫道</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td >4</td>
+                    <td>亿美</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>快加易</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td rowspan="5"><span style="margin-top: 80px;display: block; ">联通</span></td>
+                    <td>雨辰润联</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>鸿联</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>漫道</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>亿美</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>快加易</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td rowspan="5"><span style="margin-top: 80px;display: block; ">电信</span></td>
+                    <td>雨辰润联</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>鸿联</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>漫道</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>亿美</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>快加易</td>
+                    <td>10</td>
+                    <td><button type="button" class="btn btn-info">查看</button> | <button type="button" class="btn btn-danger">修改</button> </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">运营商:</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static" id="message-text"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">渠道商:</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static"><span id="message-ch"></span></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">占比:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="recipient-name" placeholder="占比不能超过100">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
