@@ -18,23 +18,23 @@ public class MessageContext {
 
     public void setContext(Map<String, Object> context) {
         this.context = context;
-    }
+        }
 
-    public void put(String key, Object obj){
+public void put(String key, Object obj){
         context.put(key,obj);
-    }
+        }
 
-    public Object get(String key){
+public Object get(String key){
         return context.get(key);
-    }
+        }
 
-    public Container getContainer(){
+public Container getContainer(){
         return (Container) context.get(CONTAINER);
-    }
+        }
 
-    public void setContainer(Container container){
+public void setContainer(Container container){
         context.put(CONTAINER,container);
-    }
+        }
 
 
-}
+        }

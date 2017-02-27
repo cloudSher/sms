@@ -14,7 +14,7 @@ import java.util.Properties;
 public class ResourceConfigUtil {
 
     private static Logger logger = LoggerFactory.getLogger(ResourceConfigUtil.class);
-    private final static String SOURCE = "properties/inner.config";
+    private final static String SOURCE = "properties/config/inner.config";
 
     /***
      * 解析资源

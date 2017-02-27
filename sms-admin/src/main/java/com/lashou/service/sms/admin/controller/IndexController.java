@@ -44,6 +44,10 @@ public class IndexController {
         return "app/index.html";
     }
 
+    @RequestMapping("/test")
+    public String app_test(){
+        return "test";
+    }
 
     @RequestMapping("/data")
     @ResponseBody

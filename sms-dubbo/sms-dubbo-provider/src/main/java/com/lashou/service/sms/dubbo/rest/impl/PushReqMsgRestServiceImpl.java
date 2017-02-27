@@ -1,5 +1,6 @@
 package com.lashou.service.sms.dubbo.rest.impl;
 
+import com.alibaba.dubbo.container.Main;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.alibaba.fastjson.JSONObject;
 import com.lashou.service.sms.api.rest.PushReqMsgRestService;
@@ -57,6 +58,7 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
 
     public String test(){
         HttpServletRequest request = (HttpServletRequest) RpcContext.getContext().getRequest();
+        System.out.println(request.getHeaderNames());
         String mobiles = request.getParameter("mobiles");
         String content = request.getParameter("content");
         String type = request.getParameter("type");
@@ -102,6 +104,12 @@ public class PushReqMsgRestServiceImpl implements PushReqMsgRestService {
         OpResult opResult = pushService.req(message);
         String result = String.format("%1$s(%2$s)",callback, JSONObject.toJSON(opResult));
         return result;
+    }
+
+
+    public static void main(String args[]){
+        Main main = new Main();
+        main.main(null);
     }
 
 

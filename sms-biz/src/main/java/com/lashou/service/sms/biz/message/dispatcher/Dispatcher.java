@@ -21,10 +21,9 @@ import java.util.Random;
  */
 public class Dispatcher {
 
-
     private ConfigurationManager configurationManager;
     private Container container;
-    private static Dispatcher dispatcher;
+    private volatile static Dispatcher dispatcher;
     public ConfigurationManager getConfigurationManager() {
         return this.configurationManager;
     }

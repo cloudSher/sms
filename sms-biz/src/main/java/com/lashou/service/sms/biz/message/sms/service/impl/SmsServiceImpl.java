@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by sher on 1/19/16.
@@ -64,6 +65,7 @@ public class SmsServiceImpl implements SmsService{
                 }
                 else if(requestMsg.getSendScope() == 2){
                     System.out.println("=======msg个数======"+list.size());
+                    simSend();
                     addMonitor(requestMsg,1,System.currentTimeMillis()-currentTime,null);
                 }
             }
@@ -84,7 +86,27 @@ public class SmsServiceImpl implements SmsService{
         return smsResult;
     }
 
+    /**
+     * 模拟真实环境发送信息，thread sleep 随机1000ms
+     */
+    public void simSend(){
+        Random randoml = new Random();
+        int nextInt = randoml.nextInt(1000);
+        try {
+            Thread.sleep(nextInt);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
+
+    /**
+     *
+     * @param requestMsg
+     * @param code
+     * @param responseTime
+     * @param result
+     */
     public void addMonitor(SmsRequestMsg requestMsg,int code,long responseTime,Object result){
         SmsMsgMonitor monitor =  (SmsMsgMonitor) dispatcher.getContainer().getMonitor();
         if(code == 1){
@@ -139,7 +161,7 @@ public class SmsServiceImpl implements SmsService{
                 break;
             }
             try{
-                Thread.sleep(5 * 1000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 logger.error(msg.getChannel() +" 发送消息失败",e);

@@ -36,7 +36,7 @@ public class MessageRabbitHandler implements RabbitSubscriberMessageHandler {
             try {
                 Message msg = (Message) message;
                 while (smsMessageQueue.queueSize() > maxMMQueue){
-                    Thread.sleep( 5 * 1000);
+                    Thread.sleep(5 * 1000);
                 }
                 smsSender.broadCast(msg);
             } catch (InterruptedException e) {

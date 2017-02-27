@@ -1,9 +1,8 @@
 package com.lashou.service.sms.api.rest;
 
 
-import com.lashou.service.sms.domain.Message;
-import com.lashou.service.sms.domain.OpResult;
 import com.alibaba.dubbo.rpc.protocol.rest.support.ContentType;
+import com.lashou.service.sms.domain.OpResult;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

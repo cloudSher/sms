@@ -19,6 +19,6 @@ public interface PushReqMsgService {
      * 测试接口
      * @return
      */
-    String test();
+    String test(Object obj);
 
 }

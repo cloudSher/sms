@@ -24,9 +24,9 @@ public class StartUp {
 
     @Resource
     private Worker smsWorker;
-
-    @Resource
-    private ConfigListenerWorker configListenerWorker;
+//
+//    @Resource
+//    private ConfigListenerWorker configListenerWorker;
 
     public void startup(){
         logger.info("work  startup.....");
@@ -35,9 +35,9 @@ public class StartUp {
             smsWorkerPool.execute(smsWorker);
         }
 
-        logger.info("config file listener startup ....");
-        configListenerPool =Executors.newFixedThreadPool(1);
-        configListenerPool.execute(configListenerWorker);
+//        logger.info("config file listener startup ....");
+//        configListenerPool =Executors.newFixedThreadPool(1);
+//        configListenerPool.execute(configListenerWorker);
 
         logger.info("work 启动完成");
     }

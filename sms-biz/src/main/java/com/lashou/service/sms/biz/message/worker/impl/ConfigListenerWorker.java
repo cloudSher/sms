@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.*;
 
 /**
@@ -64,5 +65,11 @@ public class ConfigListenerWorker implements Worker{
             e.printStackTrace();
         }
 
+    }
+
+    public void realPath(String classPath){
+        if(classPath != null){
+//            URL url = this.getClass().
+        }
     }
 }

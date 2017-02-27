@@ -34,14 +34,14 @@ public class PushServiceImpl implements PushService {
     @Override
     public OpResult req(Message pushReq) {
        if(pushReq == null){
-           try {
-               throw new InvalidArgumentException("请求消息为空");
-           } catch (InvalidArgumentException e) {
-               e.printStackTrace();
-               logger.error("请求的消息为空",e);
-           }
-       }
-        insertMessageBody(pushReq);
+        try {
+            throw new InvalidArgumentException("请求消息为空");
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+            logger.error("请求的消息为空",e);
+        }
+    }
+    insertMessageBody(pushReq);
         return queueDispatcher.dispatchQueue(pushReq);
     }
 

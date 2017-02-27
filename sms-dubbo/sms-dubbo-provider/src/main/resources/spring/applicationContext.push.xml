@@ -10,7 +10,7 @@
     <bean id="propertyConfigurer " class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-                <value>file:${app.instance.config}/properties/*.properties</value>
+                <value>classpath*:properties/*.properties</value>
             </list>
         </property>
         <property name="fileEncoding" value="UTF-8" />
@@ -39,9 +39,9 @@
     <!-- ============================================================== -->
     <bean id="smsWorker" class="com.lashou.service.sms.biz.message.worker.impl.SmsWorker">
     </bean>
-    <bean id="configListenerWorker" class="com.lashou.service.sms.biz.message.worker.impl.ConfigListenerWorker">
-        <property name="path" value="${app.instance.config}/properties/config/"></property>
-    </bean>
+    <!--<bean id="configListenerWorker" class="com.lashou.service.sms.biz.message.worker.impl.ConfigListenerWorker">-->
+        <!--<property name="path" value="properties/config/"></property>-->
+    <!--</bean>-->
 
     <!-- =============================================================== -->
     <!-- =========================Sender配置============================ -->
@@ -50,7 +50,7 @@
     </bean>
 
     <!-- =============================================================== -->
-    <!-- =========================SMS配置================================ -->
+    <!-- =========================SMS配置=============================== -->
     <!-- =============================================================== -->
     <bean id="smsService" class="com.lashou.service.sms.biz.message.sms.service.impl.SmsServiceImpl" scope="prototype"/>
     <bean id="mdSenderPool" class="com.lashou.service.sms.biz.message.sms.operators.mandao.MDSenderPool" lazy-init="true"/>
@@ -65,10 +65,10 @@
 
 
     <!-- =============================================================== -->
-    <!-- =========================Dispatcher配置============================ -->
+    <!-- =========================Dispatcher配置======================== -->
     <!-- =============================================================== -->
     <bean id="dispatcher" class="com.lashou.service.sms.biz.message.dispatcher.Dispatcher" init-method="init">
-        <property name="fileName" value="${app.instance.config}/properties/config/inner.config"></property>
+        <property name="fileName" value="properties/config/inner.config"></property>
     </bean>
     <bean id="queueDispatcher" class="com.lashou.service.sms.biz.message.dispatcher.QueueDispatcher">
         <property name="priority" value="${push.msg.queue.priority}"></property>
